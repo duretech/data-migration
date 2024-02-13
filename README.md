@@ -1,4 +1,4 @@
-# drc_data_migration
+# data_migration
 
 ## Project setup
 ```
