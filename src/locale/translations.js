@@ -11,7 +11,7 @@ export default {
     DE: "Data Element",
     title: "Digital Data Link",
     serverConnectivity: "Server Connectivity",
-    dataMigration: "Digital Data Link",
+    dataMigration: "Data Migration",
     exportData: "Export Data",
     exportandImportData: "Export and Import Data",
     dataElementSync: "Data Element Sync",
