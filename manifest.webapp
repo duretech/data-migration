@@ -1,0 +1,22 @@
+{
+  "version": "1.4.6",
+  "name": "Data Migration",
+  "description": "Data Migration",
+  "launch_path": "/index.html",
+  "appType": "APP",
+  "icons": {
+    "16": "img/migration-logo.png",
+    "48": "img/migration-logo.png",
+    "128": "img/migration-logo.png"
+  },
+  "developer": {
+    "name": "Dure Technologies",
+    "url": "https://duretechnologies.com/"
+  },
+  "default_locale": "en",
+  "activities": {
+    "dhis": {
+      "href": "*"
+    }
+  }
+}
