@@ -9,9 +9,9 @@
 export default {
   en: {
     DE: "Data Element",
-    title: "Data Migration",
+    title: "Digital Data Link",
     serverConnectivity: "Server Connectivity",
-    dataMigration: "Data Migration",
+    dataMigration: "Digital Data Link",
     exportData: "Export Data",
     exportandImportData: "Export and Import Data",
     dataElementSync: "Data Element Sync",
@@ -63,7 +63,7 @@ export default {
     viewSyncedData: "View Synced Data",
     syncedData: "Synced Data",
     serverConnectivityNote:
-      "Data migration involves the transfer or relocation of data from one place, format, or system to another. The application facilitates the movement of data from one server to another, and the specifics regarding the servers are outlined in the following section.",
+      "Digital Data Link involves the transfer or relocation of data from one place, format, or system to another. The application facilitates the movement of data from one server to another, and the specifics regarding the servers are outlined in the following section.",
     en: "English",
     fr: "French",
     np: "Nepali",
@@ -126,7 +126,7 @@ export default {
     execute: "Execute",
     delete: "Delete",
     dataDeleted: "Template deleted successfully",
-    migrationWork: "How does Data Migration Work?",
+    migrationWork: "How does Digital Data Link Work?",
     connectionSuccessful: "Connection Successful",
     unauthorised: "Unauthrised Access",
     savedSuccessful: "Saved Successful",

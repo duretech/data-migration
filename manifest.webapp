@@ -1,7 +1,7 @@
 {
-  "version": "1.4.6",
-  "name": "Data Migration",
-  "description": "Data Migration",
+  "version": "1.0.0",
+  "name": "Digital Data Link",
+  "description": "Digital Data Link",
   "launch_path": "/index.html",
   "appType": "APP",
   "icons": {
