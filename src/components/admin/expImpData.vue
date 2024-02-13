@@ -423,8 +423,8 @@ export default {
   },
   computed: {
     selectedDataSet() {
-      let arr = [];
-      if (this.$store.getters.getDataSetList !== null) {
+      let arr = []
+      if(this.$store.getters.getDataSetList !== null){
         arr = this.$store.getters.getDataSetList.map((obj) => obj.id);
       }
       return arr;
@@ -939,7 +939,7 @@ export default {
     },
     async getDataElementList() {
       this.dataElementList = [];
-      if (this.dataSetList !== null) {
+      if(this.dataSetList !== null){
         for (let set in this.selectedDataSet) {
           // console.log(this.selectedDataSet[set]);
           let name = this.dataSetList.filter(
@@ -953,7 +953,7 @@ export default {
               let isFound = resp.data.dataElements.filter(
                 (obj) => this.dataEleSync[obj.id]
               );
-
+  
               // console.log(isFound, "isFound");
               let arr = [];
               if (isFound && isFound.length > 0) {
