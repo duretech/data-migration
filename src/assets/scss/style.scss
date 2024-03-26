@@ -6,6 +6,7 @@
 body {
   overflow-x: hidden;
   font-family: "Roboto", sans-serif !important;
+  background-color: var(--body-tab-color);
 }
 
 .fa{
@@ -27,19 +28,19 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #fff !important;
+  background-color: var(--color-white) !important;
   border-radius: 15px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #abacad !important;
+  background: var(--main-color) !important;
   border-radius: 15px;
   border: 2px solid transparent;
   background-clip: padding-box !important;
 }
 
 ::-webkit-scrollbar-thumb:vertical:hover {
-  background: #abacad !important;
+  background: var(--main-color) !important;
   border: 10px solid transparent;
 }
 
@@ -58,54 +59,54 @@ body {
 .btn-bg-transparent:hover {
   background-color: transparent !important;
   border-color: transparent !important;
-  color: #4a5768;
+  color: var(--secondary-text-color);
 }
 
 // button colors
 .blue-btn,
 .swal2-confirm {
-  background-color: #2c6693 !important;
-  border-color: #2c6693 !important;
-  color: #fff;
+  background-color: var(--blue-btn-color) !important;
+  border-color: var(--blue-btn-color) !important;
+  color: var(--color-white);
 }
 
 .cancel-btn1,
 .cancel-btn1:active,
 .cancel-btn1:hover{
-  background-color: #abacad;
-  color: #fff;
-  border-color: #abacad;
+  background-color: var(--main-color);
+  color: var(--color-white);
+  border-color: var(--main-color);
 }
 
 .btn-common,
 .btn-common:active,
 .btn-common:hover{
-  background-color: #a0adba !important;
-    border-color: #a0adba !important;
-    color: #fff !important;
+  background-color: var(--secondary-button-color) !important;
+    border-color: var(--secondary-button-color) !important;
+    color: var(--color-white) !important;
 }
 
 .button-dropdown .btn-secondary{
-  background-color: #a0adba !important;
-  border-color: #a0adba !important;
+  background-color: var(--secondary-button-color) !important;
+  border-color: var(--secondary-button-color) !important;
 }
 
-
+// modal UI 
 .modal {
   .close{
     background-color: transparent;
     border-color: transparent;
     font-size: 1.4rem;
-    color: #fff;
+    color: var(--color-white);
   }
  
   .modal-content{
     border-color: transparent !important;
   }
   .modal-header{
-    background-color: #abacad;
-    color: #fff;
-    border-color: #abacad;
+    background-color: var(--main-color);
+    color: var(--color-white);
+    border-color: var(--main-color);
     padding: 3px 15px !important;
   }
 
@@ -114,13 +115,13 @@ body {
   }
 
   .page-link{
-    color: #4a5768;
+    color: var(--secondary-text-color);
   }
 
   .page-link.active, .active > .page-link{
-    background-color: #abacad !important;
-    border-color: #abacad !important;
-    color: #fff;
+    background-color: var(--main-color) !important;
+    border-color: var(--main-color) !important;
+    color: var(--color-white);
   }
 }
 
@@ -130,11 +131,11 @@ body {
   text-align: left;
     padding: 10px;
     font-size: 1rem;
-    color: #fff;
+    color: var(--color-white);
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    background-color: #abacad;
-    border-color: #abacad;
+    background-color: var(--main-color);
+    border-color: var(--main-color);
 }
 
 .swal2-container .swal2-actions button{
@@ -144,14 +145,19 @@ body {
 
 // table css
 
-table th{
-  background-color: #abacad !important;
-  border-color: #abacad !important;
-  color: #fff !important;
-}
- table td span{
-  color: #4a5768 !important;
+table{ 
+  
+  th {
+    background-color: var(--main-color) !important;
+    border-color: var(--main-color) !important;
+    color: var(--color-white) !important;
+  }
+ 
+  td span{
+  color: var(--secondary-text-color) !important;
  }
+
+} 
 
 // plugin vue css
 .vue-treeselect__control,
@@ -160,7 +166,7 @@ table th{
 .vue-treeselect__control-arrow,
 .vue-treeselect__x-container,
 .mx-icon-calendar, .mx-icon-clear {
-  color: #6c7787cc !important;
+  color: var(--input-text-color) !important;
 }
 
 .mx-input{
@@ -168,38 +174,37 @@ table th{
 }
 
 .vue-treeselect__multi-value-item {
-    background-color: #a0adba !important;
-    border-color: #a0adba !important;
-    color: #fff !important;
+    background-color: var(--secondary-button-color) !important;
+    border-color: var(--secondary-button-color) !important;
+    color: var(--color-white) !important;
 }
 
 .vue-treeselect__value-remove{
- color: #fff !important;
+ color: var(--color-white) !important;
 }
 
 .mx-datepicker{
   width: 100% !important;
 }
 .mx-btn:hover{
-  color: #6c7787cc !important;
+  color: var(--input-text-color) !important;
 }
 
 .mx-calendar-content .cell.active {
-  color: #fff !important;
-  background-color: #a0adba !important;
+  color: var(--color-white) !important;
+  background-color: var(--secondary-button-color) !important;
 }
-
 
 .form-control:focus {
   box-shadow: none !important;
-  border-color: #dee2e67a;
+  border-color: var(--border-color);
 }
 
 .select-wrapper {
-  border-color: #dee2e67a !important;
+  border-color: var(--border-color) !important;
 
   select {
-    background: #6c7787cc
+    background: var(--input-text-color)
       url("data:image/svg+xml;utf8,<svg viewBox='0 0 140 140' width='24' height='24' xmlns='http://www.w3.org/2000/svg'><g><path d='m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z' fill='gray'/></g></svg>")
       right 0.75rem center/8px 10px no-repeat;
   }
@@ -207,19 +212,26 @@ table th{
   .form-control,
   .vue-treeselect__control,
   .mx-input {
-    color: #6c7787cc;
-    background-color: #fff;
-    border-color: #dee2e67a !important;
+    color: var(--input-text-color);
+    background-color: var(--color-white);
+    border-color: var(--border-color) !important;
 
   }
 
 }
 
+
+.select-open .vue-treeselect--open-below.vue-treeselect--has-value .vue-treeselect__multi-value,
+.select-open .vue-treeselect--has-value .vue-treeselect__multi-value
+{
+  height: 100px;
+  overflow: auto;
+}
 // header css
 .navbar {
   position: fixed !important;
   box-shadow: 0px 2px 6px #00000014;
-  background-color: #ffffff;
+  background-color: var(--color-white);
   top: 49px;
   left: 0;
   right: 0;
@@ -244,7 +256,7 @@ table th{
     span{
       font-size: 16px;
       letter-spacing: 0.8px;
-      color: #4a5768;
+      color: var(--secondary-text-color);
       opacity: 1;
       font-weight: 600;
     }
@@ -257,7 +269,7 @@ table th{
     border-color: transparent !important;
     padding: 10px !important;
     line-height: 6px;
-    color: #4a5768 !important;
+    color: var(--secondary-text-color) !important;
     box-shadow: none !important;
     cursor: pointer;
   }
@@ -269,13 +281,13 @@ table th{
   }
 
   .dropdown-menu{
-      background-color: #fff;
+      background-color: var(--color-white);
       border-radius: 12px;
-      border-color: #dee2e67a;
+      border-color: var(--border-color);
 
       .dropdown-item{
         font-size: 14px;
-        color: #6c7787d6;
+        color: var(--dropdown-text-color);
       }
   }
 
@@ -287,9 +299,9 @@ table th{
     .dropdown-menu {
 
       width: 200px;
-      background-color: #fff;
+      background-color: var(--color-white);
       border-radius: 12px;
-      border-color: #dee2e67a;
+      border-color: var(--border-color);
      
       img{
         max-width: 17px;
@@ -305,18 +317,20 @@ table th{
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      color: #6c7787d6;
+      color: var(--dropdown-text-color);
       word-wrap: break-word;
       white-space: break-spaces;
     }
 
     .dropdown-item:active{
       background-color: transparent !important;
-      color: #4a5768;
+      color: var(--secondary-text-color);
     }
   }
 
-  
+  .profile-text {
+    color: var(--color-white) !important;
+  }
 
  
 }
@@ -329,7 +343,7 @@ table th{
           }
 
           .nav-link {
-            color: #4a576882;
+            color: var(--secondary-text-color);
             transition: none;
           }
 
@@ -337,32 +351,32 @@ table th{
           .nav-pills .show > .nav-link {
             // background-color: transparent !important;
             // border-radius: 0% !important;
-            color: #4a5768 !important;
+            color: var(--secondary-text-color) !important;
             font-weight: 500;
           }
 
           .card{
             border-color: transparent;
           }
-
+          
           .tab-section{
-            height: 100vh;
+            // height: 100vh;
 
             h6 {
-              color: #4a5768;
+              color: var(--secondary-text-color);
             }
 
             .card-box{
               padding: 20px;
               border-radius: 12px !important;
-              background-color: #fff;
-              border-color: #dee2e67a !important;
+              background-color: var(--color-white);
+              border-color: var(--border-color) !important;
 
                 p.text-md-start{
                   text-align: center !important;
-                  margin-top: 4%;
-                  padding: 20px 63px;
-                  color: #4a5768;
+                  margin-top: 2%;
+                  padding: 20px 92px;
+                  color: var(--secondary-text-color);
                 }
             }
 
@@ -375,33 +389,42 @@ table th{
               border-bottom: transparent!important;
               border-color: transparent!important;
               border-radius: 50px!important;
-              color: #4a5768 !important;
+              color: var(--secondary-text-color) !important;
               background-color: transparent !important;
             }
 
             .nav-tabs .nav-link.active{
-              background-color: #abacad !important;
-              color: #fff !important;
+              background-color: var(--main-color) !important;
+              color: var(--color-white) !important;
             }
 
             .tab-content {
-              background-color: #f5f6f7;
+              background-color: var(--body-tab-color);
               margin-left: 250px;
               margin-top: 109px;
               text-align: left;
               // padding-top: 3%;
-              color: #4a5768;
+              color: var(--secondary-text-color);
 
               .card-text{
                 padding-left: 30px;
                 padding-right: 30px;
-                padding-top: 30px;
+                // padding-top: 30px;
               }
+            }
+            .text-right{
+              text-align: end;
+            }
+            .c-green{
+              color: #00df11;
+            }
+            .c-red{
+              color: rgb(212, 0, 0);
             }
 
             .main-tab-subsection .tab-content{
               margin-left: 0% !important;
-              border-top: 1px solid #abacad;
+              border-top: 1px solid var(--main-color);
             }
 
             .col-auto{
@@ -416,7 +439,7 @@ table th{
             }
 
             .card-header{
-              background-color: #abacad;
+              background-color: var(--main-color);
               padding: 40px 0 40px 20px;
               width: 250px;
               position: relative;
@@ -443,7 +466,7 @@ table th{
           padding: 15px !important;
           cursor: pointer;
           position: relative;
-          color: #fff;
+          color: var(--color-white);
           transition: none !important;
         }
         .card-header li a.active::before, .card-header li a.active::after {
@@ -451,7 +474,7 @@ table th{
           position: absolute;
         }
         .card-header li a.active {
-          background-color: #f5f6f7 !important;
+          background-color: var(--body-tab-color) !important;
           border-radius: 60px 0 0 60px !important;
           box-shadow: none !important;
           transition: none !important;
@@ -469,9 +492,9 @@ table th{
           border-bottom-right-radius: 80px;
           -moz-border-bottom-right-radius: 80px;
           -webkit-border-bottom-right-radius: 80px;
-          -webkit-box-shadow: 0 40px 0 0 #f5f6f7; 
-          -moz-box-shadow: 0 40px 0 0 #f5f6f7;
-          box-shadow: 0 40px 0 0 #f5f6f7;
+          -webkit-box-shadow: 0 40px 0 0 var(--body-tab-color); 
+          -moz-box-shadow: 0 40px 0 0 var(--body-tab-color);
+          box-shadow: 0 40px 0 0 var(--body-tab-color);
         }
         .card-header li a.active::after {
           top: 50px;
@@ -481,15 +504,15 @@ table th{
           border-top-right-radius: 80px;
           -moz-border-top-right-radius: 80px;
           -webkit-border-top-right-radius: 80px;
-          -webkit-box-shadow: 0 -40px 0 0 #f5f6f7;
-          -moz-box-shadow: 0 -40px 0 0 #f5f6f7;
-          box-shadow: 0 -40px 0 0 #f5f6f7;
+          -webkit-box-shadow: 0 -40px 0 0 var(--body-tab-color);
+          -moz-box-shadow: 0 -40px 0 0 var(--body-tab-color);
+          box-shadow: 0 -40px 0 0 var(--body-tab-color);
         }
 
         .btn-view{
-          background-color: #abacad !important;
-          border-color: #abacad !important;
-          color: #fff !important;
+          background-color: var(--main-color) !important;
+          border-color: var(--main-color) !important;
+          color: var(--color-white) !important;
           text-overflow: ellipsis;
           overflow: hidden;
           white-space: nowrap;
@@ -520,9 +543,9 @@ table th{
         }
 
         .text-img{
-          top: 35%;
+          top: 30%;
           left: 4%;
-          color: white;
+          color: var(--color-white) !important;
           font-size: 36px;
           font-weight: bold;
           width: 45% !important;
@@ -532,13 +555,27 @@ table th{
           text-align: center;
         }
 
-}
+        .text-md-start{
+          padding: 20px 92px;
+          color: var(--secondary-text-color);
+        }
 
+       
+}
 
 // separate css
 .edit-img{
   height: 18px;
 }
+.para-text{
+  word-break: break-all;
+}
+
+.customPopup {
+  max-height: 300px;
+    overflow: auto;
+}
+
 
 
 

@@ -38,7 +38,7 @@
         $t("selectionofDataElements")
       }}</label>
       <div class="col-sm-9">
-        <div class="select-wrapper">
+        <div class="select-wrapper select-open">
           <treeselect
             :options="dataElementList"
             :placeholder="$t('search')"
@@ -204,10 +204,7 @@ export default {
         let appData = this.appData;
         appData.preFix = this.preFix;
         this.deSyncReport = {};
-        let error = false,
-          errorDE = [];
-        let deCreated = 0,
-          deExist = 0;
+
         let deNameObj = {};
         let oldDEName = {};
         this.selectedDEs.forEach((sDE) => {
@@ -252,7 +249,7 @@ export default {
         // );
         let tableItems = [];
 
-        let html = `<table id="alertTable" style="
+        let html = `<table id="alertTable"  style="
           font-family: arial, sans-serif;
           border-collapse: collapse;
           width: 100%;">
@@ -295,9 +292,10 @@ export default {
                 this.sweetAlert({
                   title: this.$i18n.t("success"),
                   // text: alertText,
-                  html: `<div>${html}</div>`,
+                  html: `<div class="customPopup">${html}</div>`,
                 });
-                this.$store.commit("saveApp", appData, false);
+                this.$emit("saveApp", appData, true);
+
                 this.$store.commit("setLoading", false);
                 this.$emit("dataEleSync", this.savedDESyncData);
               }
@@ -318,12 +316,13 @@ export default {
                 this.$emit("dataEleSync", this.savedDESyncData);
 
                 console.log("Data Elements synced successfully");
+                this.$emit("saveApp", appData, true);
 
                 this.resetForm();
                 this.sweetAlert({
                   title: this.$i18n.t("success"),
                   // text: alertText,
-                  html: `<div>${html}</div>`,
+                  html: `<div class="customPopup">${html}</div>`,
                 });
                 this.$store.commit("setLoading", false);
               }
@@ -339,6 +338,7 @@ export default {
         if (allExist) {
           this.$store.commit("setLoading", false);
           this.resetForm();
+          this.$emit("saveApp", appData, true);
           this.sweetAlert({
             title: this.$i18n.t("success"),
             text: this.$i18n.t("deExist"),

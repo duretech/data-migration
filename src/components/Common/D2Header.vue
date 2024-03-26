@@ -452,7 +452,7 @@ export default {
 }
 .header-heading {
   padding: 8px;
-  color: #fff;
+  color: var(--color-white);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -470,14 +470,14 @@ export default {
 .header-profile {
   border-radius: 50%;
   width: 35px;
-  color: #fff;
+  color: var(--color-white);
   height: 35px;
   padding: 5px 6px !important;
   background-color: rgba(0, 0, 0, 0.3);
 }
 .rightbarlinks {
   margin: auto 0.8rem;
-  color: #fff;
+  color: var(--color-white);
   display: inline-block;
   vertical-align: -webkit-baseline-middle;
   text-align: -webkit-center;
@@ -513,14 +513,14 @@ i {
   width: 50%;
   right: 6px !important;
   position: absolute;
-  background: #fff;
+  background: var(--color-white);
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.14), 0 2px 2px 0 rgba(0, 0, 0, 0.12),
     0 1px 3px 0 rgba(0, 0, 0, 0.2);
   border-radius: 2px;
   transition: all 1s;
 }
 .profilebox-upper {
-  color: #000 !important;
+  color: var(--secondary-text-color) !important;
   text-align: left;
 }
 .profilebox-upper-right {
@@ -553,6 +553,10 @@ i {
   font-weight: 300;
 }
 
+#icon-profile .btn-bg-transparent, 
+#icon-profile .btn-bg-transparent:hover {
+  color: var(--color-white) !important;
+}
 ul.profile-links {
   list-style: none;
   padding: 0;
@@ -589,7 +593,7 @@ ul.profile-links li:hover {
   top: 45px;
 }
 .menubox-inner {
-  background: #fff;
+  background: var(--color-white);
   position: absolute;
   z-index: 9999;
   float: right;
@@ -599,7 +603,7 @@ ul.profile-links li:hover {
   overflow: auto;
   user-select: text;
   color: rgb(33, 41, 52);
-  background-color: #fff;
+  background-color: var(--color-white);
   padding: 12px 11px 10px;
   outline: 0px;
   border: 1px solid rgb(160, 173, 186);
@@ -616,7 +620,7 @@ a.menubox-app-link {
   display: inline-block;
   width: 33%;
   padding: 7px;
-  color: #4a5768;
+  color: var(--secondary-text-color);
   font-size: 14px;
   font-family: roboto;
 }
@@ -652,7 +656,7 @@ a.menubox-app-link:hover {
   line-height: 16px;
   user-select: text;
   color: rgb(33, 41, 52);
-  background-color: #fff;
+  background-color: var(--color-white);
   padding: 12px 11px 10px;
   outline: 0px;
   border: 1px solid rgb(160, 173, 186);
@@ -667,7 +671,7 @@ a.menubox-app-link:hover {
 }
 
 .header-profile .btn-bg-transparent {
-  color: #fff !important;
+  color: var(--color-white) !important;
 }
 .menubox-search-inner {
   /* display: flex; */
@@ -697,6 +701,6 @@ svg.jsx-3467673193 {
   width: 27px;
 }
 .btn-bg-transparent{
-  color: #fff;
+  color: var(--color-white);
 }
 </style>

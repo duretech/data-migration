@@ -8,13 +8,25 @@
             :active="activeTab === 'intro'"
             @click="updateActiveTab('intro')"
           >
-            <b-card-text class="pt-0"
-              ><b-card no-body class="card-box m-4 position-relative">
+            <div
+              class="card-text text-right pt-0"
+              :class="[connectText.val ? 'c-green' : 'c-red']"
+            >
+              <i
+                v-if="connectText.val"
+                class="fa fa-circle c-green"
+                aria-hidden="true"
+              ></i>
+              <i v-else class="fa fa-circle c-red" aria-hidden="true"></i>
+              {{ connectText.text }}
+            </div>
+            <b-card-text class="pt-0">
+              <b-card no-body class="card-box position-relative">
                 <div
                   class="d-flex justify-content-center align-items-center mb-3 flex-direction-column"
                 >
                   <div class="position-relative">
-                    <img src="../assets/images/e.png" class="mt-4" />
+                    <img src="../assets/images/e.jpg" />
                     <div class="position-absolute text-img">
                       <p>{{ $t("migrationWork") }}</p>
                     </div>
@@ -22,6 +34,26 @@
                   <p class="text-md-start mb-0">
                     {{ $t("serverConnectivityNote") }}
                   </p>
+                  <div class="text-md-start">
+                    <ol>
+                      <h4>{{ $t("preDDL") }}</h4>
+                      <li>
+                        {{ $t("p1") }}
+                      </li>
+                      <li>
+                        {{ $t("p2") }}
+                      </li>
+                      <li>
+                        {{ $t("p3") }}
+                      </li>
+                      <li>
+                        {{ $t("p4") }}
+                      </li>
+                      <li>
+                        {{ $t("p5") }}
+                      </li>
+                    </ol>
+                  </div>
                 </div>
               </b-card></b-card-text
             ></b-tab
@@ -30,6 +62,18 @@
             :title="$t('basicSetup')"
             @click="updateActiveTab('basicSetup')"
           >
+            <div
+              class="card-text text-right pt-0"
+              :class="[connectText.val ? 'c-green' : 'c-red']"
+            >
+              <i
+                v-if="connectText.val"
+                class="fa fa-sign-in c-green"
+                aria-hidden="true"
+              ></i>
+              <i v-else class="fa fa-sign-out c-red" aria-hidden="true"></i>
+              {{ connectText.text }}
+            </div>
             <b-card-text>
               <b-row class="main-tab-subsection">
                 <b-col cols="12">
@@ -41,6 +85,7 @@
                             v-if="appData"
                             :appData="appData"
                             @saveApp="saveApp"
+                            @connected="connected"
                           ></serverConnectivity>
                           <b-spinner
                             type="grow"
@@ -73,12 +118,24 @@
             "
             @click="updateActiveTab('dataMigrationSync')"
           >
+            <div
+              class="card-text text-right pt-0"
+              :class="[connectText.val ? 'c-green' : 'c-red']"
+            >
+              <i
+                v-if="connectText.val"
+                class="fa fa-sign-in c-green"
+                aria-hidden="true"
+              ></i>
+              <i v-else class="fa fa-sign-out c-red" aria-hidden="true"></i>
+              {{ connectText.text }}
+            </div>
             <b-card-text>
               <b-row class="tab-section main-tab-subsection">
                 <b-col cols="12">
                   <div class="main-body mt-2 p-0">
                     <div>
-                      <b-tabs content-class="mt-4 p-4">
+                      <b-tabs content-class="mt-4 p-4 pt-2">
                         <b-tab
                           :title="$t('dataElementSync')"
                           :active="activeTab == 'dataMigrationSync'"
@@ -248,12 +305,14 @@ export default {
       updateExpImp: true,
       connectionStatus: false,
       activeTab: "intro",
+      connectText: {},
     };
   },
   watch: {
-    connectionStatus(newVal) {
-      this.getOrgLevels();
-      this.getDataSets();
+    async connectionStatus(newVal) {
+      await this.getOrgLevels();
+      await this.getDataSets();
+      this.$store.commit("setLoading", false);
     },
     emitObj: {
       handler(newVal) {
@@ -335,6 +394,15 @@ export default {
       this.appData = newVal;
       this.saveAppData(reload);
     },
+    connected(val) {
+      if (val) {
+        this.connectText.val = true;
+        this.connectText.text = this.$i18n.t("connected");
+      } else {
+        this.connectText.val = false;
+        this.connectText.text = this.$i18n.t("disconnected");
+      }
+    },
     async getDESyncData() {
       let key = this.generateKey("DESyncData");
       await service
@@ -414,19 +482,20 @@ export default {
               this.$i18n.locale = response.data.defaultLanguageLocale;
               await loadLanguage(response.data.defaultLanguageLocale);
             }
+
             this.setApplicationDetails(response); // Set the 'applicationSetup' config file response in the store
           })
-          .then(() => {
+          .then(async () => {
             //this.getLocationList();
             if (
               this.appData?.serverConnections?.serverAURL &&
               this.appData?.serverConnections?.serverACredentials?.username &&
               this.appData?.serverConnections?.serverACredentials?.password
             ) {
-              this.getDataSets();
-              this.getOrgLevels();
-              this.getCatComboID();
-              this.getDESyncData();
+              await this.getDataSets();
+              await this.getOrgLevels();
+              await this.getCatComboID();
+              await this.getDESyncData();
               this.$store.commit("setLoading", false);
             }
           })
@@ -447,6 +516,13 @@ export default {
           this.$i18n.locale = this.appData.defaultLanguageLocale;
           await loadLanguage(this.appData.defaultLanguageLocale);
         }
+        if (this.appData.serverConnections.connectionStatus) {
+          this.connectText.val = true;
+          this.connectText.text = this.$i18n.t("connected");
+        } else {
+          this.connectText.val = false;
+          this.connectText.text = this.$i18n.t("disconnected");
+        }
         // Set the theme on hot-reload
         service.applyTheme();
         //this.getLocationList();
@@ -455,16 +531,15 @@ export default {
           this.appData?.serverConnections?.serverACredentials?.username &&
           this.appData?.serverConnections?.serverACredentials?.password
         ) {
-          this.getDataSets();
-          this.getOrgLevels();
-          this.getCatComboID();
-          this.getDESyncData();
+          await this.getDataSets();
+          await this.getOrgLevels();
+          await this.getCatComboID();
+          await this.getDESyncData();
+          this.$store.commit("setLoading", false);
         }
-        this.$store.commit("setLoading", false);
       }
     },
     async getDataSets() {
-      // console.log("this.$store.getters.getDataSetList" , this.$store.getters.getDataSetList)
       if (!this.$store.getters.getDataSetList) {
         await service
           .getDataSets({ secondary: true })
@@ -508,7 +583,7 @@ export default {
               this.$i18n.locale = this.appData.defaultLanguageLocale;
               await loadLanguage(this.appData.defaultLanguageLocale);
             }
-            this.$nextTick(() => {
+            this.$nextTick(async () => {
               this.updateDOM++;
               this.$store.commit("setStoreValues");
               this.$store.commit("setIsClearCache", true);
@@ -516,10 +591,10 @@ export default {
               if (reload) {
                 this.connectionStatus = !this.connectionStatus;
               }
+              this.$store.commit("setLoading", false);
             });
             // location.reload(reload);
           }
-          this.$store.commit("setLoading", false);
         });
     },
     /**
@@ -609,6 +684,13 @@ export default {
       //this.$store.commit("setTheme", response.data.defaultColorTheme); // Set the theme in to store
       this.$store.commit("setLocalLang", response.data.defaultLanguageLocale); // Set the defaultLanguageLocale in to store
       // Set the theme
+      if (response.data.serverConnections.connectionStatus) {
+        this.connectText.val = true;
+        this.connectText.text = this.$i18n.t("connected");
+      } else {
+        this.connectText.val = false;
+        this.connectText.text = this.$i18n.t("disconnected");
+      }
       service.applyTheme();
     },
   },

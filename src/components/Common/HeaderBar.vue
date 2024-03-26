@@ -30,6 +30,13 @@
             no-close-on-backdrop
           >
             <div class="row mx-0">
+              <b-form-input
+                class="w-25 m-3"
+                id="filter-input"
+                v-model="filter"
+                type="search"
+                placeholder="Type to Search"
+              ></b-form-input>
               <b-table
                 id="trans-table"
                 responsive
@@ -38,11 +45,14 @@
                 hover
                 :empty-text="$t('no_data_to_display')"
                 :empty-filtered-text="$t('no_data_to_display')"
-                :per-page="perPage"
+                per-page="10"
                 :current-page="currentPage"
                 :fields="tempFields"
                 :items="tempItems"
                 show-empty
+                :filter="filter"
+                filter-included-fields="name"
+                @filtered="onFiltered"
               >
                 <!-- at line 90   <i
                           class="fa fa-edit cursor-pointer"
@@ -54,45 +64,55 @@
                   <span v-html="data.value"></span>
                 </template>
                 <template #cell(edit)="data">
-                  <img
-                    :src="require('@/assets/images/icons/editActive.svg')"
-                    class="img-fluid w-24 cursor-pointer edit-img"
-                    v-b-tooltip.hover
-                    :title="$t('edit')"
-                    @click="
-                      executeTemplates({
-                        item: data.item,
-                        index: data.index,
-                        type: 'edit',
-                      })
-                    "
-                  />
+                  <button class="b-transparent p-0 border-transparent m-0">
+                    <img
+                      :src="require('@/assets/images/icons/editActive.svg')"
+                      class="img-fluid w-24 cursor-pointer edit-img"
+                      v-b-tooltip.hover
+                      :title="$t('edit')"
+                      @click="
+                        executeTemplates({
+                          item: data.item,
+                          index: data.index,
+                          type: 'edit',
+                        })
+                      "
+                    />
+                  </button>
                 </template>
                 <template #cell(view)="row">
-                  <img
-                    :src="require('@/assets/images/icons/view-updatedicon.svg')"
-                    class="img-fluid w-24 cursor-pointer edit-img"
-                    v-b-tooltip.hover
-                    :title="$t('view')"
-                    @click="row.toggleDetails"
-                  />
+                  <button class="b-transparent p-0 border-transparent m-0">
+                    <img
+                      :src="
+                        require('@/assets/images/icons/view-updatedicon.svg')
+                      "
+                      class="img-fluid w-24 cursor-pointer edit-img"
+                      v-b-tooltip.hover
+                      :title="$t('view')"
+                      @click="row.toggleDetails"
+                    />
+                  </button>
                 </template>
                 <template #row-details="row">
                   <b-card>
                     <b-row class="mb-2">
-                      <b-col sm="3" class="text-sm-right"
+                      <b-col sm="2" class="text-sm-right"
                         ><b>{{ $t("selectionofDataElements") }} : </b></b-col
                       >
-                      <b-col>{{ row.item.tempDetails.selectedDEsName }}</b-col>
+                      <b-col>
+                        <p class="para-text">
+                          {{ row.item.tempDetails.selectedDEsName }}
+                        </p>
+                      </b-col>
                     </b-row>
                     <b-row class="mb-2">
-                      <b-col sm="3" class="text-sm-right"
+                      <b-col sm="2" class="text-sm-right"
                         ><b>{{ $t("selectionOfOrganization") }}: </b></b-col
                       >
                       <b-col>{{ row.item.tempDetails.selectedOrgName }}</b-col>
                     </b-row>
                     <b-row class="mb-2">
-                      <b-col sm="3" class="text-sm-right"
+                      <b-col sm="2" class="text-sm-right"
                         ><b>{{ $t("period") }}: </b></b-col
                       >
                       <b-col>{{
@@ -106,7 +126,7 @@
                       }}</b-col>
                     </b-row>
                     <b-row class="mb-2">
-                      <b-col sm="3" class="text-sm-right"
+                      <b-col sm="2" class="text-sm-right"
                         ><b>{{ $t("selectionOfLevel") }} : </b></b-col
                       >
                       <b-col>{{ row.item.tempDetails.selectedOrgLevel }}</b-col>
@@ -118,36 +138,40 @@
                   </b-card>
                 </template>
                 <template #cell(delete)="data">
-                  <img
-                    :src="
-                      require('@/assets/images/icons/Icon material-delete-forever.svg')
-                    "
-                    class="img-fluid w-24 cursor-pointer edit-img"
-                    v-b-tooltip.hover
-                    :title="$t('delete')"
-                    @click="
-                      executeTemplates({
-                        item: data.item,
-                        index: data.index,
-                        type: 'delete',
-                      })
-                    "
-                  />
+                  <button class="b-transparent p-0 border-transparent m-0">
+                    <img
+                      :src="
+                        require('@/assets/images/icons/Icon material-delete-forever.svg')
+                      "
+                      class="img-fluid w-24 cursor-pointer edit-img"
+                      v-b-tooltip.hover
+                      :title="$t('delete')"
+                      @click="
+                        executeTemplates({
+                          item: data.item,
+                          index: data.index,
+                          type: 'delete',
+                        })
+                      "
+                    />
+                  </button>
                 </template>
                 <template #cell(execute)="data">
-                  <img
-                    :src="require('@/assets/images/icons/execute-icon.svg')"
-                    class="img-fluid w-24 cursor-pointer edit-img"
-                    v-b-tooltip.hover
-                    :title="$t('execute')"
-                    @click="
-                      executeTemplates({
-                        item: data.item,
-                        index: data.index,
-                        type: 'execute',
-                      })
-                    "
-                  />
+                  <b-button class="b-transparent p-0 border-transparent m-0">
+                    <img
+                      :src="require('@/assets/images/icons/execute-icon.svg')"
+                      class="img-fluid w-24 cursor-pointer edit-img"
+                      v-b-tooltip.hover
+                      :title="$t('execute')"
+                      @click="
+                        executeTemplates({
+                          item: data.item,
+                          index: data.index,
+                          type: 'execute',
+                        })
+                      "
+                    />
+                  </b-button>
                 </template>
                 <template #empty="scope">
                   <h5 class="text-center">{{ scope.emptyText }}</h5>
@@ -158,6 +182,13 @@
                   </h5>
                 </template>
               </b-table>
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="totalRows"
+                per-page="10"
+                aria-controls="my-table"
+                align="center"
+              ></b-pagination>
             </div>
           </b-modal>
         </template>
@@ -188,7 +219,9 @@
             <b-dropdown-text class="text-center font-14 border-bottom-header">
               <div class="profilebox-upper">
                 <div class="profilebox-upper-left">
-                  <div class="text-body">{{ profileInitials }}</div>
+                  <div class="text-body profile-text">
+                    {{ profileInitials }}
+                  </div>
                 </div>
               </div>
               <!-- <b-avatar variant="primary"></b-avatar> -->
@@ -311,6 +344,7 @@
                             type="file"
                             id="csv-file"
                             @change="updateFileName"
+                            accept=".csv"
                           />
                         </p>
                         <div class="text-right d-flex justify-content-end">
@@ -557,6 +591,8 @@ export default {
       },
       availability: "",
       fileName: "",
+      filter: null,
+      totalRows: 1,
     };
   },
   computed: {
@@ -615,9 +651,30 @@ export default {
     },
   },
   methods: {
+    onFiltered(filteredItems) {
+      // Trigger pagination to update the number of buttons/pages due to filtering
+      this.totalRows = filteredItems.length;
+      this.currentPage = 1;
+    },
     executeTemplates(obj) {
-      this.$refs["showTemplates"].hide();
-      this.$emit("emitExecute", obj);
+      if (obj.type == "delete") {
+        this.$swal({
+          text: this.$i18n.t("noRetrive"),
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: this.$i18n.t("yesDel"),
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.$refs["showTemplates"].hide();
+            this.$emit("emitExecute", obj);
+          }
+        });
+      } else {
+        this.$refs["showTemplates"].hide();
+        this.$emit("emitExecute", obj);
+      }
     },
     viewTemplates() {
       this.$refs["showTemplates"].show();
@@ -640,7 +697,11 @@ export default {
 
           this.templatesData = resp.data;
           this.tempFields = [
-            { key: "name", label: this.$i18n.t("name") },
+            // { key: "tempId", label: this.$i18n.t("id") },
+            {
+              key: "name",
+              label: this.$i18n.t("name"),
+            },
             { key: "createdOn", label: this.$i18n.t("createdOn") },
             {
               key: "edit",
@@ -661,11 +722,22 @@ export default {
           ];
           Object.keys(this.templatesData).forEach((keys) => {
             let rows = {};
+            rows["tempId"] = this.templatesData[keys]["tempId"];
             rows["name"] = this.templatesData[keys]["tempName"];
             rows["createdOn"] = this.templatesData[keys]["createdOn"];
             rows["tempDetails"] = this.templatesData[keys]["tempDetails"];
             this.tempItems.push(rows);
           });
+          this.totalRows = this.tempItems.length;
+
+          this.tempItems.sort((a, b) => {
+            // console.log(new Date(a["createdOn"]) , new Date(b["createdOn"]))
+            return (
+              new Date(b["createdOn"]) -
+              new Date(a["createdOn"])
+            );
+          });
+          console.log(this.tempItems)
         })
         .catch((err) => {
           this.$store.commit("setLoading", false);
@@ -1000,13 +1072,27 @@ export default {
   font-size: 20px;
   padding: 10px 12px;
   height: 50px;
-  background: #abacad;
+  background: var(--main-color);
   border-radius: 50%;
 }
 .border-bottom-header {
-  border-bottom: 1px solid #dee2e67a;
+  border-bottom: 1px solid var(--border-color);
 }
 .b-table-sticky-header {
   max-height: 400px;
+}
+.b-transparent,
+.b-transparent:hover,
+.b-transparent:focus,
+.b-transparent:active {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+.border-transparent,
+.border-transparent:hover,
+.border-transparent:focus,
+.border-transparent:active {
+  border: 0px;
+  border-color: transparent;
 }
 </style>

@@ -1,136 +1,7 @@
 <template>
   <div class="row mt-2">
     <div class="col-lg-12">
-      <!-- <div class="row d-flex justify-content-end mx-4">
-        <b-button
-          class="col-sm-3 w-auto btn-view mb-3"
-          @click="viewTemplates()"
-        >
-          <img
-            src="../../assets/images/icons/templateicon.svg"
-            v-b-tooltip.hover
-            :title="$t('viewTeamp')"
-            style="height: 20px"
-          />
-          <span class="mx-2">
-            {{ $t("viewTeamp") }}
-          </span>
-        </b-button>
-        <b-modal
-          ref="showTemplates"
-          id="showTemplates"
-          hide-footer
-          centered
-          size="xl"
-          :title="$t('viewTeamp')"
-          :cancel-title="$t('cancelbtn')"
-          no-close-on-backdrop
-        >
-          <div class="row mx-0">
-            <b-table
-              id="trans-table"
-              responsive
-              sticky-header
-              bordered
-              hover
-              :empty-text="$t('no_data_to_display')"
-              :empty-filtered-text="$t('no_data_to_display')"
-              :per-page="perPage"
-              :current-page="currentPage"
-              :fields="tempFields"
-              :items="tempItems"
-              show-empty
-            >
-            
-              <template #cell()="data">
-                <span v-html="data.value"></span>
-              </template>
-              <template #cell(edit)="data">
-                <img
-                  :src="require('@/assets/images/icons/editActive.svg')"
-                  class="img-fluid w-24 cursor-pointer edit-img"
-                  v-b-tooltip.hover
-                  :title="$t('edit')"
-                  @click="executeTemplates(data.item, data.index, 'edit')"
-                />
-              </template>
-              <template #cell(view)="row">
-                <img
-                  :src="require('@/assets/images/icons/view-updatedicon.svg')"
-                  class="img-fluid w-24 cursor-pointer edit-img"
-                  v-b-tooltip.hover
-                  :title="$t('view')"
-                  @click="row.toggleDetails"
-                />
-              </template>
-              <template #row-details="row">
-                <b-card>
-                  <b-row class="mb-2">
-                    <b-col sm="3" class="text-sm-right"
-                      ><b>{{ $t("selectionofDataElements") }} : </b></b-col
-                    >
-                    <b-col>{{ row.item.tempDetails.selectedDEsName }}</b-col>
-                  </b-row>
-                  <b-row class="mb-2">
-                    <b-col sm="3" class="text-sm-right"
-                      ><b>{{ $t("selectionOfOrganization") }}: </b></b-col
-                    >
-                    <b-col>{{ row.item.tempDetails.selectedOrgName }}</b-col>
-                  </b-row>
-                  <b-row class="mb-2">
-                    <b-col sm="3" class="text-sm-right"
-                      ><b>{{ $t("period") }}: </b></b-col
-                    >
-                    <b-col>{{
-                      $moment(row.item.tempDetails.customPeriod[0]).format(
-                        "ll"
-                      ) +
-                      " - " +
-                      $moment(row.item.tempDetails.customPeriod[1]).format("ll")
-                    }}</b-col>
-                  </b-row>
-                  <b-row class="mb-2">
-                    <b-col sm="3" class="text-sm-right"
-                      ><b>{{ $t("selectionOfLevel") }} : </b></b-col
-                    >
-                    <b-col>{{ row.item.tempDetails.selectedOrgLevel }}</b-col>
-                  </b-row>
-
-                  <b-button size="sm" @click="row.toggleDetails"
-                    >Hide Details</b-button
-                  >
-                </b-card>
-              </template>
-              <template #cell(execute)="data">
-                <img
-                  :src="require('@/assets/images/icons/execute-icon.svg')"
-                  class="img-fluid w-24 cursor-pointer edit-img"
-                  v-b-tooltip.hover
-                  :title="$t('edit')"
-                  @click="executeTemplates(data.item, data.index, 'execute')"
-                />
-              </template>
-              <template #empty="scope">
-                <h5 class="text-center">{{ scope.emptyText }}</h5>
-              </template>
-              <template #emptyfiltered="scope">
-                <h5 class="text-center">
-                  {{ scope.emptyFilteredText }}
-                </h5>
-              </template>
-            </b-table>
-            <div>
-              <b-pagination
-                v-model="currentPage"
-                :total-rows="rows"
-                :per-page="perPage"
-                aria-controls="trans-table"
-                align="center"
-              ></b-pagination>
-            </div>
-          </div>
-        </b-modal>
-      </div> -->
+    <h6><span class="text-capitalize" v-if="formType != 'new'">{{$t("templateName")}} - </span>{{ selectedName }}</h6>
       <div class="form-group row">
         <div class="col-lg-6">
           <div class="form-group row">
@@ -160,8 +31,9 @@
                 <Datepicker
                   v-model="customPeriod"
                   type="date"
-                  range
+                  range="true"
                   class="form-control ml-2 p-0"
+                  format="YYYY-MM-DD"
                 ></Datepicker>
               </div>
             </div>
@@ -191,39 +63,12 @@
           </div>
         </div>
       </div>
-      <!-- <div class="form-group row mt-3">
-        <label for="inputDefaultLevelID" class="col-sm-3 col-form-label">{{
-          $t("selectionofDataSet")
-        }}</label>
-        <div class="col-sm-9">
-          <div class="select-wrapper">
-            <b-col cols="12" class="footer-col pt-1">
-              <div class="loc-col mr-3">
-                <treeselect
-                  :options="dataSetList"
-                  :show-count="true"
-                  :multiple="true"
-                  :load-options="loadOptions"
-                  :placeholder="$t('search')"
-                  v-model="selectedDataSet"
-                  :flat="false"
-                  :default-expand-level="1"
-                  @open="
-                    openM1 = false;
-                    openY1 = false;
-                  "
-                />
-              </div>
-            </b-col>
-          </div>
-        </div>
-      </div> -->
       <div class="form-group row mt-3">
         <label for="dataElementList" class="col-sm-3 col-form-label">{{
           $t("selectionofDataElements")
         }}</label>
         <div class="col-sm-9">
-          <div class="select-wrapper">
+          <div class="select-wrapper select-open">
             <treeselect
               :options="dataElementList"
               :placeholder="$t('search')"
@@ -263,7 +108,7 @@
         <div class="col-sm-3"></div>
         <div class="col-sm-9 d-flex justify-content-end align-items-end">
           <b-button class="blue-btn" @click="continueM()">{{
-            $t("exportandImportData")
+            $t("save")
           }}</b-button>
         </div>
       </div>
@@ -281,6 +126,8 @@ import loadLocChildMixin from "@/helpers/LoadLocationChildMixin";
 import Datepicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 import { randomString } from "@/components/Common/commonFunctions";
+import chunk from "lodash/chunk";
+
 export default {
   name: "expImpData",
   props: [
@@ -298,8 +145,10 @@ export default {
   data() {
     return {
       appDataLocal: this.appData,
+      selectedName: "",
       selectedDEs: [],
       selectedOrg: [],
+      formType: "new",
       dataElementList: [],
       orgOptions: [],
       orgOptionsUpdated: [],
@@ -309,16 +158,27 @@ export default {
         dataValues: [],
       },
       savedTemplates: null,
-      // tempFields: [],
+      tempId: null,
       // tempItems: [],
       templatesData: null,
       // currentPage: 1,
       // perPage: 10,
       // rows: 0,
       executeableObj: null,
+      uploadChunkLogs: null,
+      statusLogs: null,
     };
   },
   watch: {
+    // uploadChunkLogs: {
+    //   handler(newVal) {
+    //     this.$store.commit(
+    //       "setLoadingText",
+    //       JSON.parse(JSON.stringify(newVal))
+    //     );
+    //   },
+    //   deep: true,
+    // },
     emitObj: {
       handler(newVal) {
         this.executeableObj = newVal;
@@ -328,7 +188,7 @@ export default {
     executeableObj: {
       handler(newVal) {
         console.log("emiitede from header", newVal);
-        this.executeTemplates(newVal.item, newVal.index, newVal.type);
+        this.executeTemplates(newVal.item,  newVal.type);
       },
       deep: true,
     },
@@ -423,8 +283,8 @@ export default {
   },
   computed: {
     selectedDataSet() {
-      let arr = []
-      if(this.$store.getters.getDataSetList !== null){
+      let arr = [];
+      if (this.$store.getters.getDataSetList !== null) {
         arr = this.$store.getters.getDataSetList.map((obj) => obj.id);
       }
       return arr;
@@ -452,17 +312,16 @@ export default {
     },
   },
   methods: {
-    executeTemplates(item, index, type) {
+    executeTemplates(item,  type) {
       //this.$refs["showTemplates"].hide();
       this.$store.commit("setLoading", true);
 
-      console.log(item, index, "Execute temp");
+      //console.log(item, index, "Execute temp");
       if (type !== "delete") {
         let foundData = null;
-        let executeData = Object.keys(this.templatesData).filter(
-          (obj, objInd) => {
-            console.log(obj, objInd, index);
-            if (objInd === index) {
+        Object.keys(this.templatesData).filter(
+          (obj) => {
+            if (obj === item.tempId) {
               foundData = this.templatesData[obj];
               return obj;
             } else return null;
@@ -471,15 +330,21 @@ export default {
         if (foundData && foundData.tempDetails && type !== "delete") {
           this.selectedDEs = foundData.tempDetails.selectedDEs;
           this.selectedOrg = foundData.tempDetails.selectedOrg;
-          //this.selectedOrgLevel = foundData.tempDetails.selectedOrgLevel;
-          this.customPeriod = foundData.tempDetails.customPeriod;
+          this.selectedName = foundData.tempName;
+          this.customPeriod = [
+            new Date(foundData.tempDetails.customPeriod[0]),
+            new Date(foundData.tempDetails.customPeriod[1]),
+          ];
+          this.tempId = foundData.tempId;
+          this.formType = "edit";
+          //console.log("this.customPeriod", this.customPeriod);
           if (type === "execute") this.dataExport();
           else this.$store.commit("setLoading", false);
         }
       } else {
         //steps to remove data
         this.templatesData = Object.keys(this.templatesData)
-          .filter((objKey, keyIndex) => keyIndex !== index)
+          .filter((objKey, keyIndex) => objKey !== item.tempId)
           .reduce((newObj, key) => {
             newObj[key] = this.templatesData[key];
             return newObj;
@@ -494,9 +359,9 @@ export default {
           })
           .then((resp) => {
             if (resp.data.status === "OK") {
-              this.sweetAlert({
-                title: this.$i18n.t("success"),
+              this.$swal({
                 text: this.$i18n.t("dataDeleted"),
+                icon: "success",
               });
             }
           })
@@ -522,29 +387,6 @@ export default {
         })
         .then((resp) => {
           this.templatesData = resp.data;
-          this.tempFields = [
-            { key: "name", label: this.$i18n.t("name") },
-            { key: "createdOn", label: this.$i18n.t("createdOn") },
-            {
-              key: "edit",
-              label: this.$i18n.t("edit"),
-            },
-            {
-              key: "view",
-              label: this.$i18n.t("view"),
-            },
-            {
-              key: "execute",
-              label: this.$i18n.t("execute"),
-            },
-          ];
-          Object.keys(this.templatesData).forEach((keys) => {
-            let rows = {};
-            rows["name"] = this.templatesData[keys]["tempName"];
-            rows["createdOn"] = this.templatesData[keys]["createdOn"];
-            rows["tempDetails"] = this.templatesData[keys]["tempDetails"];
-            this.tempItems.push(rows);
-          });
         })
         .catch((err) => {
           console.log("Templates not found");
@@ -638,9 +480,10 @@ export default {
               if (resp.data.status === "OK") {
                 this.templatesData = this.savedTemplates;
                 this.rows = Object.keys(this.templatesData).length;
-                this.dataExport();
+                if (this.formType != "edit") this.dataExport();
               }
             });
+          this.$store.commit("setLoading", false);
         })
         .catch((err) => {
           if (!this.savedTemplates) this.savedTemplates = {};
@@ -654,9 +497,10 @@ export default {
               if (resp.data.status === "OK") {
                 this.templatesData = this.savedTemplates;
                 this.rows = Object.keys(this.templatesData).length;
-                this.dataExport();
+                if (this.formType != "edit") this.dataExport();
               }
             });
+          this.$store.commit("setLoading", false);
         });
       console.log(
         "this.savedTemplates",
@@ -670,53 +514,158 @@ export default {
         this.selectedOrgLevel &&
         this.customPeriod.length > 0
       ) {
-        this.$swal({
-          title: this.$i18n.t("saveTemp"),
-          input: "checkbox",
-          inputValue: 1,
-          inputPlaceholder: this.$i18n.t("doYouWantToSave"),
-          confirmButtonText:
-            this.$i18n.t("saveCont") +
-            `&nbsp;<i class="fa fa-arrow-right"></i>
-  `,
-          showDenyButton: true,
-          inputValidator: (result) => {
-            return !result && this.$i18n.t("selectCheckbox");
-          },
-          denyButtonText: this.$i18n.t("exportandImportData"),
-          denyButtonColor: "#3085d6",
-          showCancelButton: true,
-          cancelButtonText: this.$i18n.t("cancelbtn"),
-        }).then((result) => {
-          /* Read more about isConfirmed, isDenied below */
-          if (result.isConfirmed) {
-            this.$swal({
-              title: this.$i18n.t("saveTemp"),
-              input: "text",
-              inputPlaceholder: this.$i18n.t("typeTemaplteName"),
-              inputValidator: (result) => {
-                return !result && this.$i18n.t("enterTempName");
-              },
-              confirmButtonText:
-                this.$i18n.t("saveCont") +
-                `&nbsp;<i class="fa fa-arrow-right"></i>`,
-              showCancelButton: true,
-              cancelButtonText: this.$i18n.t("cancelbtn"),
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.templateName = result.value;
+        console.log(this.formType, "this.formType", this.tempId);
+        if (this.formType == "new") {
+          this.$swal({
+            title: this.$i18n.t("saveTemp"),
+            input: "checkbox",
+            inputValue: 1,
+            inputPlaceholder: this.$i18n.t("doYouWantToSave"),
+            confirmButtonText:
+              this.$i18n.t("saveCont") +
+              `&nbsp;<i class="fa fa-arrow-right"></i>`,
+            showDenyButton: true,
+            inputValidator: (result) => {
+              return !result && this.$i18n.t("selectCheckbox");
+            },
+            denyButtonText: this.$i18n.t("exportandImportData"),
+            denyButtonColor: "#3085d6",
+            showCancelButton: true,
+            cancelButtonText: this.$i18n.t("cancelbtn"),
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              this.$swal({
+                title: this.$i18n.t("saveTemp"),
+                input: "text",
+                inputPlaceholder: this.$i18n.t("typeTemaplteName"),
+                inputValidator: (result) => {
+                  if (!result) {
+                    return this.$i18n.t("enterTempName");
+                  } else if (!this.checkNameList(result)) {
+                    return this.$i18n.t("enterUniName");
+                  }
+                },
+                confirmButtonText:
+                  this.$i18n.t("saveCont") +
+                  `&nbsp;<i class="fa fa-arrow-right"></i>`,
+                showCancelButton: true,
+                cancelButtonText: this.$i18n.t("cancelbtn"),
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.templateName = result.value;
+                  this.saveTemplate();
+                  this.$swal({
+                    text: this.$i18n.t("dataSaved"),
+                    icon: "success",
+                  });
+                }
+              });
+            } else if (result.isDenied) {
+              this.dataExport();
+            }
+          });
+        } else {
+          this.$swal({
+            text: this.$i18n.t("doYouWantToSaveExist"),
+            confirmButtonText: this.$i18n.t("editExist"),
+            showDenyButton: true,
+            denyButtonText: this.$i18n.t("createNew"),
+            denyButtonColor: "#3085d6",
+            showCancelButton: true,
+            cancelButtonText: this.$i18n.t("cancelbtn"),
+          }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+              //save exist temp
 
-                this.saveTemplate();
-                // this.$swal({
-                //   title: this.$i18n.t("saveTemp"),
-                //   text: "Your template saved",
-                // });
-              }
-            });
-          } else if (result.isDenied) {
-            this.dataExport();
-          }
-        });
+              console.log("save existing temp");
+              // let isFound = null;
+              Object.keys(this.templatesData).forEach((key) => {
+                if (key === this.tempId) {
+                  //isFound = this.templatesData[key]
+                  this.templatesData[key]["name"] = this.templateName;
+                  this.templatesData[key].tempDetails["customPeriod"] =
+                    this.customPeriod;
+                  this.templatesData[key].tempDetails["selectedDEs"] =
+                    this.selectedDEs;
+                  this.templatesData[key].tempDetails["selectedOrg"] =
+                    this.selectedOrg;
+                  this.templatesData[key].tempDetails["selectedOrgLevel"] =
+                    this.selectedOrgLevel;
+                  this.templatesData[key].tempDetails["selectedDEsName"] =
+                    this.nameOfDE(this.selectedDEs, this.dataElementList);
+                  this.templatesData[key].tempDetails["selectedOrgName"] =
+                    this.nameOfOrg(this.selectedOrg, this.orgOptionsUpdated);
+                }
+              });
+              let key = this.generateKey("savedTemplates");
+              this.$store.commit("setLoading", true);
+              service
+                .getSavedConfig({
+                  tableKey: key,
+                })
+                .then((resp) => {
+                  console.log(
+                    resp,
+                    this.tempId,
+                    this.templatesData[this.tempId]
+                  );
+                  this.$store.commit("setLoading", false);
+                  this.savedTemplates = resp.data;
+                  this.savedTemplates[this.tempId] =
+                    this.templatesData[this.tempId];
+                  service
+                    .updateConfig({
+                      data: this.savedTemplates,
+                      tableKey: key,
+                    })
+                    .then((resp) => {
+                      if (resp.data.status === "OK") {
+                        this.templatesData = this.savedTemplates;
+                        this.$swal({
+                          text: this.$i18n.t("dataUpdated"),
+                          icon: "success",
+                        });
+                      }
+                    });
+                })
+                .catch((err) => {
+                  this.$store.commit("setLoading", false);
+                  console.log("err", err);
+                });
+            } else if (result.isDenied) {
+              //save new temp
+              this.$swal({
+                title: this.$i18n.t("saveTemp"),
+                input: "text",
+                inputPlaceholder: this.$i18n.t("typeTemaplteName"),
+                inputValidator: (result) => {
+                  console.log("result", result, this.checkNameList(result));
+                  if (!result) {
+                    return this.$i18n.t("enterTempName");
+                  } else if (!this.checkNameList(result)) {
+                    return this.$i18n.t("enterUniName");
+                  }
+                },
+                confirmButtonText:
+                  this.$i18n.t("saveCont") +
+                  `&nbsp;<i class="fa fa-arrow-right"></i>`,
+                showCancelButton: true,
+                cancelButtonText: this.$i18n.t("cancelbtn"),
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  this.templateName = result.value;
+                  this.saveTemplate();
+                  this.$swal({
+                    text: this.$i18n.t("dataSaved"),
+                    icon: "success",
+                  });
+                }
+              });
+            }
+          });
+        }
       } else {
         this.$store.commit("setLoading", false);
         // this.resetForm();
@@ -724,6 +673,19 @@ export default {
           title: this.$i18n.t("error"),
           text: this.$i18n.t("pleaseSelect"),
         });
+      }
+    },
+    checkNameList(checkThisName) {
+      let found = "";
+      Object.keys(this.templatesData).forEach((id) => {
+        if (this.templatesData[id].tempName === checkThisName) {
+          found = true;
+        }
+      });
+      if (found) {
+        return false;
+      } else {
+        return true;
       }
     },
     getDataSetPeriod(dsId) {
@@ -762,6 +724,7 @@ export default {
     },
     dataExport() {
       this.$store.commit("setLoading", true);
+      this.$store.commit("setLoadingText", "Data upload process started");
       if (
         this.selectedDEs.length > 0 &&
         this.selectedOrg.length > 0 &&
@@ -823,7 +786,93 @@ export default {
         });
       }
     },
+    async dataChunkLogic(chunks, chunkSize = 200) {
+      this.uploadChunkLogs = {};
+      this.uploadChunkLogs["TotalChunks"] = chunks.length;
+      this.uploadChunkLogs["successCount"] = 0;
+      this.uploadChunkLogs["failureCount"] = 0;
+      this.uploadChunkLogs["failureChunks"] = [];
+      // this.$store.commit(
+      //   "setLoadingText",
+      //   "Total " + chunks.length + "chunks are created "
+      // );
+      for (let [index, oneChunk] of chunks.entries()) {
+        console.log(index, oneChunk, "index, oneChunk");
+        if (oneChunk.length) {
+          //Upload item model API Call
+          let fileWithChunk = {};
+          fileWithChunk.dataValues = oneChunk;
+
+          console.log(
+            this.uploadChunkLogs,
+            "this.uploadChunkLogs",
+            fileWithChunk,
+            index
+          );
+          let recordCount = chunkSize * 1 * (index + 1);
+          recordCount =
+            recordCount > this.finalIncJson.dataValues.length
+              ? this.finalIncJson.dataValues.length
+              : recordCount;
+          this.$store.commit(
+            "setLoadingText",
+            "Data Uploading for " +
+              recordCount +
+              " of " +
+              this.finalIncJson.dataValues.length +
+              " records."
+          );
+          await this.fileUpload(fileWithChunk);
+          if (index === chunks.length - 1) {
+            this.$store.commit("setLoading", false);
+            let html =
+              "<div><p>Total chunks created are : <b>" +
+              this.uploadChunkLogs["TotalChunks"] +
+              "</b></p><p>Total chunks uploaded are : <b>" +
+              this.uploadChunkLogs["successCount"] +
+              "</b></p><p>Failed chunk count : <b>" +
+              this.uploadChunkLogs["failureCount"] +
+              "</b></p></div>";
+            console.log(this.uploadChunkLogs, "this.uploadChunkLogs");
+            this.$swal({
+              title: this.$i18n.t("uploadStatus"),
+              text: this.$i18n.t("dataUpdated"),
+              showConfirmButton:
+                this.uploadChunkLogs["failureCount"] > 0 ? true : false,
+              confirmButtonText: this.$i18n.t("reTry"),
+              showDenyButton: true,
+              denyButtonText: this.$i18n.t("ok"),
+              denyButtonColor: "#3085d6",
+            }).then((result) => {
+              console.log(result);
+              if (result.isConfirmed) {
+                this.dataChunkLogic(this.uploadChunkLogs["failureChunks"], 200);
+              }
+            });
+            this.resetForm();
+          }
+
+          // console.log(
+          //   this.uploadChunkLogs?.["chunksStatus"]?.[
+          //     "Chunk" + chunks.length - 1
+          //   ]?.["SUCCESS"]
+          // );
+          // if (
+          //   Object.keys(this.uploadChunkLogs["chunksStatus"]) ===
+          //   chunks.length
+          // ) {
+          //   this.$store.commit("setLoading", false);
+          // }
+        } else {
+          // //Inside item price details
+          // console.log("inside item price");
+          // //API call for fetching price info
+          // this.getitemPriceInfo(item.id);
+        }
+      }
+    },
     async getApiData(sDEs, periodArr, annualDEs, annualArr) {
+      this.finalIncJson["dataValues"] = [];
       let promises = [];
       if (sDEs.length > 0) {
         let indID = sDEs.join(";");
@@ -882,7 +931,10 @@ export default {
       });
       console.log(noDataFound, this.finalIncJson.dataValues);
       if (!noDataFound && this.finalIncJson.dataValues.length > 0) {
-        this.fileUpload();
+        let chunkSize = 200;
+        let chunks = chunk(this.finalIncJson.dataValues, chunkSize);
+        console.log(chunks, "chunks");
+        this.dataChunkLogic(chunks, chunkSize);
       } else {
         this.resetForm();
         this.sweetAlert({
@@ -939,21 +991,21 @@ export default {
     },
     async getDataElementList() {
       this.dataElementList = [];
-      if(this.dataSetList !== null){
+      if (this.dataSetList !== null) {
         for (let set in this.selectedDataSet) {
           // console.log(this.selectedDataSet[set]);
           let name = this.dataSetList.filter(
             (item) => item.id == this.selectedDataSet[set]
           );
           let dataSetPeriod = this.getDataSetPeriod(name[0].id);
-          this.$store.commit("setLoading", true);
+          // this.$store.commit("setLoading", true);
           await service
             .getDataElementsByDataSets(this.selectedDataSet[set], true)
             .then((resp) => {
               let isFound = resp.data.dataElements.filter(
                 (obj) => this.dataEleSync[obj.id]
               );
-  
+
               // console.log(isFound, "isFound");
               let arr = [];
               if (isFound && isFound.length > 0) {
@@ -977,7 +1029,7 @@ export default {
             });
         }
       }
-      this.$store.commit("setLoading", false);
+      // this.$store.commit("setLoading", false);
     },
     async formatExportedData(expData) {
       // console.log(expData);
@@ -997,83 +1049,148 @@ export default {
         }
       });
     },
-    async fileUpload() {
+    async finalUploadStatus(uploadID) {
       await service
-        .uploadJson(this.finalIncJson)
+        .showTaskSumm(uploadID)
+        .then((taskResp) => {
+          console.log(taskResp, "taskResp");
+
+          if (taskResp && taskResp.data && taskResp.data.status === "SUCCESS") {
+            this.uploadChunkLogs["successCount"] =
+              this.uploadChunkLogs["successCount"] * 1 + 1;
+            // this.resetForm();
+            // this.sweetAlert({
+            //   title: this.$i18n.t("success"),
+            //   text: this.$i18n.t("dataImportedSuccessfully"),
+            // });
+          } else if (
+            taskResp &&
+            taskResp.data &&
+            taskResp.data.status === "WARNING"
+          ) {
+            this.uploadChunkLogs["successCount"] =
+              this.uploadChunkLogs["successCount"] * 1 + 1;
+            //this.$store.commit("setLoading", false);
+            // this.resetForm();
+            // this.sweetAlert({
+            //   title: this.$i18n.t("success"),
+            //   text: this.$i18n.t("dataImportedSuccessfully"),
+            // });
+          } else {
+            setTimeout(async () => {
+              await this.finalUploadStatus(uploadID);
+            }, 5000);
+
+            // this.$store.commit("setLoading", false);
+            // this.resetForm();
+            // this.sweetAlert({
+            //   title: this.$i18n.t("error"),
+            //   text: this.$i18n.t("somethingWentWrong"),
+            // });
+          }
+        })
+        .catch(async (err) => {
+          console.log(err, "err to check err type");
+          await this.finalUploadStatus(uploadID);
+          //this.$store.commit("setLoading", false);
+          //this.resetForm();
+          // this.sweetAlert({
+          //   title: this.$i18n.t("error"),
+          //   text: this.$i18n.t("somethingWentWrong"),
+          // });
+          //         this.$swal({
+          //           title: this.$i18n.t("saveTemp"),
+          //           text: "Some network error occured. Please retry",
+          //           // input: "checkbox",
+          //           // inputValue: 1,
+          //           // inputPlaceholder: this.$i18n.t("doYouWantToSave"),
+          //           confirmButtonText:
+          //             this.$i18n.t("reTry") +
+          //             `&nbsp;<i class="fa fa-arrow-repeat"></i>
+          // `,
+          //           // showDenyButton: true,
+          //           // inputValidator: (result) => {
+          //           //   return !result && this.$i18n.t("selectCheckbox");
+          //           // },
+          //           // denyButtonText: this.$i18n.t("exportandImportData"),
+          //           // denyButtonColor: "#3085d6",
+          //           showCancelButton: true,
+          //           cancelButtonText: this.$i18n.t("cancelbtn"),
+          //         }).then((result) => {
+          //           /* Read more about isConfirmed, isDenied below */
+          //           if (result.isConfirmed) {
+          //             this.$store.commit("setLoading", true);
+          //             this.finalUploadStatus(uploadID);
+          //           }
+          //         });
+        });
+    },
+    async fileUpload(fileJson) {
+      await service
+        .uploadJson(fileJson)
         .then((resp) => {
           if (resp && resp.data && resp.data.status === "OK") {
             return resp;
           } else {
-            this.$store.commit("setLoading", false);
-            this.resetForm();
-            this.sweetAlert({
-              title: this.$i18n.t("error"),
-              text: this.$i18n.t("somethingWentWrong"),
-            });
+            // this.$store.commit("setLoading", false);
+            // this.resetForm();
+            // this.sweetAlert({
+            //   title: this.$i18n.t("error"),
+            //   text: this.$i18n.t("somethingWentWrong"),
+            // });
           }
         })
-        .then((resp) => {
+        .then(async (resp) => {
           let uploadID = resp.data.response["id"];
-          service
+          await service
             .showTask(uploadID)
             .then((tResp) => {
+              console.log(tResp, "tResp");
+              // if (tResp && tResp.data.length > 0) {
+              //   //let reversed = tResp.data.reverse();
+              //   // this.$store.commit(
+              //   //   "setLoadingText",
+              //   //   "Upload status of chunk " + chunkIndex
+              //   // );
+              //   // reversed.forEach((obj) => {
+              //   //   this.$store.commit("setLoadingText", obj.message);
+              //   // });
+              // }
               return tResp;
             })
-            .then(() => {
-              service.showTaskSumm(uploadID).then((taskResp) => {
-                if (
-                  taskResp &&
-                  taskResp.data &&
-                  taskResp.data.status === "SUCCESS"
-                ) {
-                  this.$store.commit("setLoading", false);
-                  this.resetForm();
-                  this.sweetAlert({
-                    title: this.$i18n.t("success"),
-                    text: this.$i18n.t("dataImportedSuccessfully"),
-                  });
-                } else if (
-                  taskResp &&
-                  taskResp.data &&
-                  taskResp.data.status === "WARNING"
-                ) {
-                  this.$store.commit("setLoading", false);
-                  this.resetForm();
-                  this.sweetAlert({
-                    title: this.$i18n.t("success"),
-                    text: this.$i18n.t("dataImportedSuccessfully"),
-                  });
-                } else {
-                  this.$store.commit("setLoading", false);
-                  this.resetForm();
-                  this.sweetAlert({
-                    title: this.$i18n.t("error"),
-                    text: this.$i18n.t("somethingWentWrong"),
-                  });
-                }
-              });
+            .then(async () => {
+              console.log("Calling this.finalUploadStatus");
+              await this.finalUploadStatus(uploadID);
             })
             .catch((err) => {
-              this.$store.commit("setLoading", false);
-              this.resetForm();
-              this.sweetAlert({
-                title: this.$i18n.t("error"),
-                text: this.$i18n.t("somethingWentWrong"),
-              });
+              this.uploadChunkLogs["failureChunks"].push(fileJson.dataValues);
+              this.uploadChunkLogs["failureCount"] =
+                this.uploadChunkLogs["failureCount"] * 1 + 1;
+              // this.$store.commit("setLoading", false);
+              // this.resetForm();
+              // this.sweetAlert({
+              //   title: this.$i18n.t("error"),
+              //   text: this.$i18n.t("somethingWentWrong"),
+              // });
             });
         })
         .catch((err) => {
+          this.uploadChunkLogs["failureChunks"].push(fileJson.dataValues);
+          this.uploadChunkLogs["failureCount"] =
+            this.uploadChunkLogs["failureCount"] * 1 + 1;
           this.resetForm();
           this.$store.commit("setLoading", false);
         });
     },
     resetForm() {
       this.selectedDEs = [];
+      this.selectedName = "";
       //this.selectedDataSet = null;
       this.dataSetPeriod = "";
       this.selectedOrg = [];
       // this.dataElementList = [];
       this.customPeriod = [];
+      this.formType = "new";
     },
     // selectAll() {
     //   let _t = this;

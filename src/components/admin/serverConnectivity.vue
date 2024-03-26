@@ -19,7 +19,7 @@
             </div>
           </div>
         </div>
-        <div class="form-group row mb-3">
+        <div class="form-group row mb-3" v-if="showFieldsBtns">
           <label for="input-2" class="col-sm-3 col-form-label">
             {{ $t("username") }}
           </label>
@@ -35,7 +35,7 @@
             </div>
           </div>
         </div>
-        <div class="form-group row mb-3">
+        <div class="form-group row mb-3" v-if="showFieldsBtns">
           <label for="input-3" class="col-sm-3 col-form-label">
             {{ $t("password") }}
           </label>
@@ -139,14 +139,53 @@
       </div>
     </div>
     <div
-      class="row float-right d-flex justify-content-end align-items-end mt-3"
+      class="d-flex justify-content-end align-items-center mt-3"
+      v-if="showFieldsBtns"
     >
+      <div v-if="showFieldsBtns && !this.serverConnections.connectionStatus">
+        <b-icon
+          class="mx-4 c-pointer"
+          icon="info-circle-fill"
+          scale="2"
+          variant="info"
+          @click="showModal()"
+        ></b-icon>
+      </div>
       <div class="text-center">
-        <b-button class="col-sm-2 blue-btn w-auto" @click="saveConnection">{{
-          $t("connect")
-        }}</b-button>
+        <b-button class="col-sm-2 blue-btn w-auto" @click="saveConnection">
+          {{ $t("connect") }}
+        </b-button>
       </div>
     </div>
+    <div
+      class="row float-right d-flex justify-content-end align-items-end mt-3"
+      v-if="!showFieldsBtns"
+    >
+      <div class="text-center">
+        <b-button
+          class="col-sm-2 blue-btn w-auto mx-2"
+          @click="disconnectConnection"
+        >
+        {{ $t("disconnect") }}
+        </b-button>
+      </div>
+    </div>
+    <div
+      class="row float-right d-flex justify-content-end align-items-end mt-3"
+      v-if="!showFieldsBtns"
+    >
+      <div class="text-center">
+        <b-button class="col-sm-2 blue-btn w-auto" @click="resetAction">
+          {{ $t("reset") }}
+        </b-button>
+      </div>
+    </div>
+    <b-modal v-model="modalShow" :title="$t('troubleshooting')">
+      <b-table striped hover :items="items"></b-table>
+      <template #modal-footer="{ cancel }">
+        <b-button @click="cancel"> {{ $t("close") }}</b-button>
+      </template>
+    </b-modal>
   </div>
 </template>
 <script>
@@ -176,7 +215,22 @@ export default {
           password: "",
         },
       },
+      reset: false,
+      modalShow: false,
+      items: [],
     };
+  },
+  computed: {
+    showFieldsBtns() {
+      if (!this.reset) {
+        return (
+          !this.serverConnections.connectionStatus &&
+          (this.reset || !this.serverConnections.connectionStatus)
+        );
+      } else {
+        return true;
+      }
+    },
   },
   methods: {
     async saveConnection() {
@@ -208,18 +262,16 @@ export default {
       this.getOrgLevels();
     },
     async getOrgLevels() {
-      // console.log(
-      //   this.$store.getters.getSecondaryServerUrl,
-      //   "getSecondaryServerUrl"
-      // );
       await service
         .getOrganisationUnitLevels({ secondary: true })
         .then((l) => {
+          this.serverConnections.connectionStatus = true;
           this.orgLevels = l.data.map((obj) => {
             return { value: obj.level, text: obj.displayName };
           });
           this.$store.commit("setOrgLevels", l.data);
           this.$emit("saveApp", this.appDataLocal, true);
+          this.$emit("connected", this.serverConnections.connectionStatus);
           this.sweetAlert({
             title: this.$i18n.t("success"),
             // text: alertText,
@@ -227,14 +279,41 @@ export default {
           });
         })
         .catch((err) => {
+          this.serverConnections.connectionStatus = false;
           this.$emit("saveApp", this.appDataLocal, true);
-          console.log(err, "insecdplace");
+          this.$emit("connected", this.serverConnections.connectionStatus);
           this.sweetAlert({
             title: this.$i18n.t("success"),
             // text: alertText,
             html: `<div>${this.$i18n.t("unauthorised")}</div>`,
           });
         });
+      this.reset = false;
+    },
+    disconnectConnection() {
+      this.reset = true;
+      this.serverConnections.serverACredentials.username = "";
+      this.serverConnections.serverACredentials.password = "";
+    },
+    resetAction() {
+      this.reset = true;
+    },
+    showModal() {
+      this.items= [
+        {
+          [this.$i18n.t("sno")] : 1,
+          [this.$i18n.t("reasons")]: this.$i18n.t("r1"),
+        },
+        {
+          [this.$i18n.t("sno")] : 2,
+          [this.$i18n.t("reasons")]: this.$i18n.t("r2"),
+        },
+        {
+          [this.$i18n.t("sno")] : 3,
+          [this.$i18n.t("reasons")]: this.$i18n.t("r3"),
+        }
+      ],
+      this.modalShow = true;
     },
   },
   watch: {
@@ -259,3 +338,12 @@ export default {
   },
 };
 </script>
+
+<style>
+.text-info {
+  color: var(--blue-btn-color) !important;
+}
+.c-pointer {
+  cursor: pointer;
+}
+</style>

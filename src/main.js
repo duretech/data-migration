@@ -3,7 +3,7 @@ import Vue from "vue";
 import router from "./router";
 //eslint-disable-next-line
 import bootstrap from "bootstrap";
-import { BootstrapVue } from "bootstrap-vue";
+import { BootstrapVue ,  BootstrapVueIcons } from "bootstrap-vue";
 import GlobalMixin from "./helpers/GlobalMixin";
 import VueSweetalert2 from "vue-sweetalert2";
 import moment from "moment";
@@ -27,6 +27,7 @@ Vue.mixin(GlobalMixin);
 Vue.component("Loader", LoaderBar);
 Vue.component("downloadCsv", JsonCSV);
 Vue.use(BootstrapVue);
+Vue.use(BootstrapVueIcons)
 Vue.use(VuePapaParse);
 Vue.prototype.$moment = moment;
 Vue.config.productionTip = false;

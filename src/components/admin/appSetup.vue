@@ -261,8 +261,8 @@ export default {
             html: `<div>${this.$i18n.t("savedSuccessful")}</div>`,
           });
     },
-    getConfigData() {
-      service
+    async getConfigData() {
+      await service
         .getOrganisation({ secondary: true })
         .then((orgList) => {
           this.organizationList = orgList.data.organisationUnits;
@@ -286,6 +286,8 @@ export default {
     },
   },
   created() {
+    //to check if we have credentials stored
+
     this.getConfigData();
   },
 };

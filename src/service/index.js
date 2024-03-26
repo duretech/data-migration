@@ -919,8 +919,7 @@ class DataService {
   getAllowedLocation() {
     // Default values are coming from the 'applicationModule' config file. We need to compare what is the allowed organisation level for the logged in user.
     // If user has permission below the organisation level [levelID] set in the 'applicationModule' config file, then we need to load the application with the organisation allowed to the user under the 'dataViewOrganisationUnits' array which we will get in the 'me.json' API response [See getLoggedInUser()], else the application will load with the organisation set in the 'applicationModule' config file.
-    let isFromDefault = true;
-    let appData = store.getters.getApplicationModule(isFromDefault);
+    let appData = store.getters.getApplicationModule();
     let uData = store.getters.getUserDetails,
       uLevel = uData?.dataViewOrganisationUnits?.[0]?.level || 0;
     let locationID = appData?.defaultLocationID?.[0],
