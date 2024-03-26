@@ -157,8 +157,8 @@ export default {
     p5: "Multiple data checks that DHIS2 provides (system setting -> Data import setting); these checks should be disabled to ensure data import seamlessly.",
     uploadStatus: "Data Upload Status",
     acc: "Account",
-    connected: "Connected",
-    disconnected: "Disconnected",
+    Connected: "Connected",
+    Disconnected: "Disconnected",
     templateName: "Template Name",
   },
   fr: {
@@ -312,8 +312,8 @@ export default {
     p5: "Plusieurs contrôles de données fournis par DHIS2 (paramètres du système -> paramètres d'importation de données) ; ces vérifications doivent être désactivées pour garantir une importation transparente des données.",
     uploadStatus: "Data Upload Status",
     acc: "compte",
-    connected: "Connecté",
-    disconnected: "Débranché",
+    Connected: "Connecté",
+    Disconnected: "Débranché",
     templateName : "Nom du modèle",
   },
 };

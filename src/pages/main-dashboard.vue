@@ -3,23 +3,23 @@
     <b-card no-body>
       <div>
         <b-tabs pills card vertical class="tab-section">
+          <div
+            class="card-text text-right pt-0"
+            :class="[connectText.val ? 'c-green' : 'c-red']"
+          >
+            <i
+              v-if="connectText.val"
+              class="fa fa-circle c-green"
+              aria-hidden="true"
+            ></i>
+            <i v-else class="fa fa-circle c-red" aria-hidden="true"></i>
+            {{ $t(`${connectText.text}`) }}
+          </div>
           <b-tab
             :title="$t('intro')"
             :active="activeTab === 'intro'"
             @click="updateActiveTab('intro')"
           >
-            <div
-              class="card-text text-right pt-0"
-              :class="[connectText.val ? 'c-green' : 'c-red']"
-            >
-              <i
-                v-if="connectText.val"
-                class="fa fa-circle c-green"
-                aria-hidden="true"
-              ></i>
-              <i v-else class="fa fa-circle c-red" aria-hidden="true"></i>
-              {{ connectText.text }}
-            </div>
             <b-card-text class="pt-0">
               <b-card no-body class="card-box position-relative">
                 <div
@@ -62,18 +62,6 @@
             :title="$t('basicSetup')"
             @click="updateActiveTab('basicSetup')"
           >
-            <div
-              class="card-text text-right pt-0"
-              :class="[connectText.val ? 'c-green' : 'c-red']"
-            >
-              <i
-                v-if="connectText.val"
-                class="fa fa-sign-in c-green"
-                aria-hidden="true"
-              ></i>
-              <i v-else class="fa fa-sign-out c-red" aria-hidden="true"></i>
-              {{ connectText.text }}
-            </div>
             <b-card-text>
               <b-row class="main-tab-subsection">
                 <b-col cols="12">
@@ -118,18 +106,6 @@
             "
             @click="updateActiveTab('dataMigrationSync')"
           >
-            <div
-              class="card-text text-right pt-0"
-              :class="[connectText.val ? 'c-green' : 'c-red']"
-            >
-              <i
-                v-if="connectText.val"
-                class="fa fa-sign-in c-green"
-                aria-hidden="true"
-              ></i>
-              <i v-else class="fa fa-sign-out c-red" aria-hidden="true"></i>
-              {{ connectText.text }}
-            </div>
             <b-card-text>
               <b-row class="tab-section main-tab-subsection">
                 <b-col cols="12">
@@ -305,7 +281,10 @@ export default {
       updateExpImp: true,
       connectionStatus: false,
       activeTab: "intro",
-      connectText: {},
+      connectText: {
+        val: false,
+        text: "Disconnected",
+      },
     };
   },
   watch: {
@@ -397,10 +376,10 @@ export default {
     connected(val) {
       if (val) {
         this.connectText.val = true;
-        this.connectText.text = this.$i18n.t("connected");
+        this.connectText.text = "Connected";
       } else {
         this.connectText.val = false;
-        this.connectText.text = this.$i18n.t("disconnected");
+        this.connectText.text = "Disconnected";
       }
     },
     async getDESyncData() {
@@ -497,6 +476,13 @@ export default {
               await this.getCatComboID();
               await this.getDESyncData();
               this.$store.commit("setLoading", false);
+              if (this.appData?.serverConnections.connectionStatus) {
+                this.connectText.val = true;
+                this.connectText.text = "Connected";
+              } else {
+                this.connectText.val = false;
+                this.connectText.text = "Disconnected";
+              }
             }
           })
           .catch((err) => {
@@ -516,13 +502,7 @@ export default {
           this.$i18n.locale = this.appData.defaultLanguageLocale;
           await loadLanguage(this.appData.defaultLanguageLocale);
         }
-        if (this.appData.serverConnections.connectionStatus) {
-          this.connectText.val = true;
-          this.connectText.text = this.$i18n.t("connected");
-        } else {
-          this.connectText.val = false;
-          this.connectText.text = this.$i18n.t("disconnected");
-        }
+
         // Set the theme on hot-reload
         service.applyTheme();
         //this.getLocationList();
@@ -535,6 +515,13 @@ export default {
           await this.getOrgLevels();
           await this.getCatComboID();
           await this.getDESyncData();
+          if (this.appData.serverConnections.connectionStatus) {
+            this.connectText.val = true;
+            this.connectText.text = "Connected";
+          } else {
+            this.connectText.val = false;
+            this.connectText.text = "Disconnected";
+          }
           this.$store.commit("setLoading", false);
         }
       }
@@ -684,13 +671,7 @@ export default {
       //this.$store.commit("setTheme", response.data.defaultColorTheme); // Set the theme in to store
       this.$store.commit("setLocalLang", response.data.defaultLanguageLocale); // Set the defaultLanguageLocale in to store
       // Set the theme
-      if (response.data.serverConnections.connectionStatus) {
-        this.connectText.val = true;
-        this.connectText.text = this.$i18n.t("connected");
-      } else {
-        this.connectText.val = false;
-        this.connectText.text = this.$i18n.t("disconnected");
-      }
+
       service.applyTheme();
     },
   },
