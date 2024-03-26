@@ -160,6 +160,9 @@ export default {
     Connected: "Connected",
     Disconnected: "Disconnected",
     templateName: "Template Name",
+    dataUploadStart: "Data upload process started",
+    dataUploadProgress:
+      "Data Uploading for {recordCount} of {totalLength} records.",
   },
   fr: {
     reTry: "Please retry",
@@ -310,10 +313,13 @@ export default {
     p3: "Le serveur secondaire doit être ajouté à la liste blanche pour permettre la communication des services.",
     p4: "L'élément de données qui doit être exporté doit faire partie de l'ensemble de données.",
     p5: "Plusieurs contrôles de données fournis par DHIS2 (paramètres du système -> paramètres d'importation de données) ; ces vérifications doivent être désactivées pour garantir une importation transparente des données.",
-    uploadStatus: "Data Upload Status",
+    uploadStatus: "Statut de téléchargement des données",
     acc: "compte",
     Connected: "Connecté",
     Disconnected: "Débranché",
-    templateName : "Nom du modèle",
+    templateName: "Nom du modèle",
+    dataUploadStart: "Le processus de téléchargement des données a commencé",
+    dataUploadProgress:
+      "Téléchargement de données pour {recordCount} des enregistrements {totalLength}.",
   },
 };

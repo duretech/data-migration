@@ -1,7 +1,11 @@
 <template>
   <div class="row mt-2">
     <div class="col-lg-12">
-    <h6><span class="text-capitalize" v-if="formType != 'new'">{{$t("templateName")}} - </span>{{ selectedName }}</h6>
+      <h6>
+        <span class="text-capitalize" v-if="formType != 'new'"
+          >{{ $t("templateName") }} - </span
+        >{{ selectedName }}
+      </h6>
       <div class="form-group row">
         <div class="col-lg-6">
           <div class="form-group row">
@@ -188,7 +192,7 @@ export default {
     executeableObj: {
       handler(newVal) {
         console.log("emiitede from header", newVal);
-        this.executeTemplates(newVal.item,  newVal.type);
+        this.executeTemplates(newVal.item, newVal.type);
       },
       deep: true,
     },
@@ -312,21 +316,19 @@ export default {
     },
   },
   methods: {
-    executeTemplates(item,  type) {
+    executeTemplates(item, type) {
       //this.$refs["showTemplates"].hide();
       this.$store.commit("setLoading", true);
 
       //console.log(item, index, "Execute temp");
       if (type !== "delete") {
         let foundData = null;
-        Object.keys(this.templatesData).filter(
-          (obj) => {
-            if (obj === item.tempId) {
-              foundData = this.templatesData[obj];
-              return obj;
-            } else return null;
-          }
-        );
+        Object.keys(this.templatesData).filter((obj) => {
+          if (obj === item.tempId) {
+            foundData = this.templatesData[obj];
+            return obj;
+          } else return null;
+        });
         if (foundData && foundData.tempDetails && type !== "delete") {
           this.selectedDEs = foundData.tempDetails.selectedDEs;
           this.selectedOrg = foundData.tempDetails.selectedOrg;
@@ -724,7 +726,7 @@ export default {
     },
     dataExport() {
       this.$store.commit("setLoading", true);
-      this.$store.commit("setLoadingText", "Data upload process started");
+      this.$store.commit("setLoadingText", this.$i18n.t("dataUploadStart"));
       if (
         this.selectedDEs.length > 0 &&
         this.selectedOrg.length > 0 &&
@@ -814,14 +816,11 @@ export default {
             recordCount > this.finalIncJson.dataValues.length
               ? this.finalIncJson.dataValues.length
               : recordCount;
-          this.$store.commit(
-            "setLoadingText",
-            "Data Uploading for " +
-              recordCount +
-              " of " +
-              this.finalIncJson.dataValues.length +
-              " records."
-          );
+          let statement = this.$i18n.t("dataUploadProgress", {
+            recordCount: recordCount,
+            totalLength: this.finalIncJson.dataValues.length,
+          });
+          this.$store.commit("setLoadingText", statement);
           await this.fileUpload(fileWithChunk);
           if (index === chunks.length - 1) {
             this.$store.commit("setLoading", false);
