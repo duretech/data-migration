@@ -26,3 +26,10 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Release Notes
+```
+1.Upgradation in server connectivity
+2.Enhancement in data import process
+3.Bugs and resolvement
+```
