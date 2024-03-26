@@ -3,7 +3,7 @@
 
 The very first asset you will require after running the application is the configuration files.
 
-Refer the [Configuration Files](https://duretechnology-my.sharepoint.com/:f:/r/personal/dure_central_duretechnologies_com/Documents/Avenir_Generic/Data%20Migration%20app/Config%20Files?csf=1&web=1&e=yHiCZw) 
+Refer the [Configuration Files](https://duretechnology-my.sharepoint.com/:u:/g/personal/dure_central_duretechnologies_com/EQVfi2b_GU5Ev6NrvcBy4CkBIj3ulTvT0_jNlsaNLZzLig?e=gOuXG9) 
 ## Project setup
 ```
 npm install
