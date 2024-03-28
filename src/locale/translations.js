@@ -266,7 +266,7 @@ export default {
     deCreated: "data elements are created",
     deExist: "data elements are exist",
     errorOccured: "Error occured for following data elements",
-    alreadyExists: "Already Exists",
+    alreadyExists: "Existe déjà",
     intro: "Introduction",
     basicSetup: "Configuration de base",
     doYouWantToSave: "Voulez-vous enregistrer comme modèle ?",

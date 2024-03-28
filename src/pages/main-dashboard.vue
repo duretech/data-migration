@@ -465,6 +465,12 @@ export default {
             this.setApplicationDetails(response); // Set the 'applicationSetup' config file response in the store
           })
           .then(async () => {
+            if (this.appData?.serverConnections) {
+              this.appData.serverConnections =
+                typeof this.appData?.serverConnections === "object"
+                  ? this.appData.serverConnections
+                  : decompress(JSON.parse(this.appData.serverConnections));
+            }
             //this.getLocationList();
             if (
               this.appData?.serverConnections?.serverAURL &&
@@ -658,12 +664,6 @@ export default {
      * @params 1) response = applicationSetup config file response
      */
     setApplicationDetails(response) {
-      if (response.data?.serverConnections) {
-        response.data.serverConnections =
-          typeof response.data?.serverConnections === "object"
-            ? response.data.serverConnections
-            : decompress(JSON.parse(response.data.serverConnections));
-      }
       this.$store.commit("setApplicationModule", response.data);
       this.appData = response.data; // Set the response in the local variable to use further
       // Set locale/language for the moment library
