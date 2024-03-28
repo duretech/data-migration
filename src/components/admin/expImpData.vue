@@ -236,7 +236,8 @@ export default {
 
     connectionStatus(newVal) {
       //this.updatePage = newVal;
-      this.getLocationList();
+      console.log("connectionStatus in watch in expImp component", newVal);
+      this.getLocationList(true);
       this.getDataElementList();
     },
 
@@ -696,10 +697,10 @@ export default {
       );
       return findDataSet?.["periodType"] || "Monthly";
     },
-    async getLocationList() {
+    async getLocationList(refetch = false) {
       // console.log("getLocationList", this.$store.getters.getLocationList);
 
-      if (!this.$store.getters.getLocationList) {
+      if (!this.$store.getters.getLocationList || refetch) {
         // Get the locationID & levelID from the 'getAllowedLocation()' function available in 'service.js' file.
         try {
           let { locationID, levelID } = service.getAllowedLocation();
@@ -1224,7 +1225,7 @@ export default {
     },
   },
   created() {
-    this.getLocationList();
+    this.getLocationList(true);
     this.getDataElementList();
     this.getTemplatesData();
   },

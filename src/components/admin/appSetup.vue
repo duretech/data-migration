@@ -165,9 +165,10 @@ export default {
       },
       deep: true,
     },
-    connectionStatus(newVal){
+    connectionStatus(newVal) {
+      console.log("connectionStatus watch", newVal);
       this.getConfigData();
-    }
+    },
     // defaultLevelID: function (newVal) {
     //   this.$store.getters.getApplicationModule(
     //     this.$store.getters.namespace
@@ -241,6 +242,10 @@ export default {
   },
   methods: {
     saveData() {
+       console.log(
+        this.appFetchData?.serverConnections,
+        "this.appFetchData?.serverConnections on saving"
+      );
       // this.$store.commit("setLoading", true);
       this.appFetchData.defaultLevelID = this.defaultLevelID;
       this.appFetchData.subLevelID = this.subLevelID;
@@ -254,23 +259,14 @@ export default {
       this.appFetchData.defaultZoneLevel = this.defaultZoneLevel;
       this.appFetchData.defaultLanguageLocale = this.localLang;
       this.$store.commit("setLocalLang", this.localLang);
-      this.$emit("saveApp", this.appFetchData);
+      this.$emit("saveApp", this.appFetchData, true);
       this.sweetAlert({
-            title: this.$i18n.t("success"),
-            // text: alertText,
-            html: `<div>${this.$i18n.t("savedSuccessful")}</div>`,
-          });
+        title: this.$i18n.t("success"),
+        // text: alertText,
+        html: `<div>${this.$i18n.t("savedSuccessful")}</div>`,
+      });
     },
     async getConfigData() {
-      await service
-        .getOrganisation({ secondary: true })
-        .then((orgList) => {
-          this.organizationList = orgList.data.organisationUnits;
-          // console.log(this.organizationList, "organizationList");
-        })
-        .catch((err) => {
-          this.organizationList = [];
-        });
       let lnglist = [];
       // if (this.$store.getters.getAppSettings?.langList?.length > 0) {
       //   this.$store.getters.getAppSettings.langList.forEach((lng) => {
@@ -283,6 +279,28 @@ export default {
       this.defaultLocationID = this.appFetchData.defaultLocationID[0];
       this.localLang = this.appFetchData.defaultLanguageLocale;
       this.defaultZoneLevel = this.appFetchData.defaultZoneLevel;
+      console.log(
+        this.appFetchData?.serverConnections,
+        "this.appFetchData?.serverConnections"
+      );
+      if (this.appFetchData?.serverConnections.connectionStatus) {
+        await service
+          .getOrganisation({ secondary: true })
+          .then((orgList) => {
+            this.organizationList = orgList.data.organisationUnits;
+            console.log(this.organizationList, "organizationList from api");
+          })
+          .catch((err) => {
+            this.organizationList = [];
+          });
+      } else {
+        this.organizationList = [];
+      }
+
+      console.log(
+        this.appFetchData?.serverConnections.connectionStatus,
+        this.organizationList
+      );
     },
   },
   created() {

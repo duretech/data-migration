@@ -370,8 +370,14 @@ export default {
       this.showDataModal = true;
     },
     saveApp(newVal, reload) {
+      this.saveAppData(newVal, reload);
+      if (newVal?.serverConnections) {
+        newVal.serverConnections =
+          typeof newVal?.serverConnections === "object"
+            ? newVal.serverConnections
+            : decompress(JSON.parse(newVal.serverConnections));
+      }
       this.appData = newVal;
-      this.saveAppData(reload);
     },
     connected(val) {
       if (val) {
@@ -472,7 +478,19 @@ export default {
                   : decompress(JSON.parse(this.appData.serverConnections));
             }
             //this.getLocationList();
+            console.log(
+              typeof this.appData?.serverConnections,
+              this.appData.serverConnections,
+              "this.appData.serverConnections"
+            );
+            console.log(
+              this.appData?.serverConnections.connectionStatus,
+              this.appData?.serverConnections?.serverAURL,
+              this.appData?.serverConnections?.serverACredentials?.username,
+              this.appData?.serverConnections?.serverACredentials?.password
+            );
             if (
+              this.appData?.serverConnections.connectionStatus &&
               this.appData?.serverConnections?.serverAURL &&
               this.appData?.serverConnections?.serverACredentials?.username &&
               this.appData?.serverConnections?.serverACredentials?.password
@@ -504,6 +522,11 @@ export default {
               ? this.appData.serverConnections
               : decompress(JSON.parse(this.appData.serverConnections));
         }
+        console.log(
+          typeof this.appData?.serverConnections,
+          this.appData.serverConnections,
+          "this.appData.serverConnections"
+        );
         if (this.$i18n.locale !== this.appData.defaultLanguageLocale) {
           this.$i18n.locale = this.appData.defaultLanguageLocale;
           await loadLanguage(this.appData.defaultLanguageLocale);
@@ -512,7 +535,14 @@ export default {
         // Set the theme on hot-reload
         service.applyTheme();
         //this.getLocationList();
+        console.log(
+          this.appData?.serverConnections.connectionStatus,
+          this.appData?.serverConnections?.serverAURL,
+          this.appData?.serverConnections?.serverACredentials?.username,
+          this.appData?.serverConnections?.serverACredentials?.password
+        );
         if (
+          this.appData?.serverConnections.connectionStatus &&
           this.appData?.serverConnections?.serverAURL &&
           this.appData?.serverConnections?.serverACredentials?.username &&
           this.appData?.serverConnections?.serverACredentials?.password
@@ -559,22 +589,23 @@ export default {
         this.dataSetList = arr;
       }
     },
-    async saveAppData(reload) {
+    async saveAppData(data, reload) {
       let key = this.generateKey("applicationModule");
-      this.appData.serverConnections = JSON.stringify(
-        compress(this.appData.serverConnections)
-      );
+      data.serverConnections =
+        typeof data.serverConnections == "object"
+          ? JSON.stringify(compress(data.serverConnections))
+          : data.serverConnections;
       await service
         .updateConfig({
-          data: this.appData,
+          data: data,
           tableKey: key,
         })
         .then(async (resp) => {
           if (resp.data.status === "OK") {
-            this.$store.commit("setApplicationModule", this.appData);
-            if (this.$i18n.locale !== this.appData.defaultLanguageLocale) {
-              this.$i18n.locale = this.appData.defaultLanguageLocale;
-              await loadLanguage(this.appData.defaultLanguageLocale);
+            this.$store.commit("setApplicationModule", data);
+            if (this.$i18n.locale !== data.defaultLanguageLocale) {
+              this.$i18n.locale = data.defaultLanguageLocale;
+              await loadLanguage(data.defaultLanguageLocale);
             }
             this.$nextTick(async () => {
               this.updateDOM++;

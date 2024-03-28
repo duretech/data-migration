@@ -8,7 +8,10 @@
         <div class="select-wrapper">
           <b-col cols="12" class="footer-col pt-1">
             <div class="loc-col mr-3">
-              <b-form-input v-model="preFix" :disabled="prefixDisable"></b-form-input>
+              <b-form-input
+                v-model="preFix"
+                :disabled="prefixDisable"
+              ></b-form-input>
             </div>
           </b-col>
         </div>
@@ -114,7 +117,7 @@ export default {
       savedDESyncData: this.dataEleSyncData,
       createCall: false,
       deSyncReport: {},
-      prefixDisable: ''
+      prefixDisable: "",
     };
   },
   watch: {
@@ -300,7 +303,6 @@ export default {
                 this.$emit("dataEleSync", this.savedDESyncData);
               }
             });
-
         }
         //   //craete key in datastore
         if (this.createCall && !allExist) {
@@ -339,17 +341,18 @@ export default {
           this.$store.commit("setLoading", false);
           this.resetForm();
           this.$emit("saveApp", appData, true);
+          this.$emit("dataEleSync", this.savedDESyncData);
+
           this.sweetAlert({
             title: this.$i18n.t("success"),
             text: this.$i18n.t("deExist"),
           });
         }
-        
-        this.prefixDisable = true
+
+        this.prefixDisable = true;
       } else {
         if (this.preFix == "") {
-          
-          this.prefixDisable = false
+          this.prefixDisable = false;
           this.sweetAlert({
             title: this.$i18n.t("error"),
             text: this.$i18n.t("Kindly give preFix value"),
@@ -450,14 +453,13 @@ export default {
       //   });
     },
   },
-  mounted(){
-    if(this?.appData?.preFix){
-      this.prefixDisable = true
+  mounted() {
+    if (this?.appData?.preFix) {
+      this.prefixDisable = true;
+    } else {
+      this.prefixDisable = false;
     }
-    else{
-      this.prefixDisable = false
-    }
-  }
+  },
 };
 </script>
 <style scoped>

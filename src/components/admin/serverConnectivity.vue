@@ -166,7 +166,7 @@
           class="col-sm-2 blue-btn w-auto mx-2"
           @click="disconnectConnection"
         >
-        {{ $t("disconnect") }}
+          {{ $t("disconnect") }}
         </b-button>
       </div>
     </div>
@@ -299,21 +299,21 @@ export default {
       this.reset = true;
     },
     showModal() {
-      this.items= [
+      (this.items = [
         {
-          [this.$i18n.t("sno")] : 1,
+          [this.$i18n.t("sno")]: 1,
           [this.$i18n.t("reasons")]: this.$i18n.t("r1"),
         },
         {
-          [this.$i18n.t("sno")] : 2,
+          [this.$i18n.t("sno")]: 2,
           [this.$i18n.t("reasons")]: this.$i18n.t("r2"),
         },
         {
-          [this.$i18n.t("sno")] : 3,
+          [this.$i18n.t("sno")]: 3,
           [this.$i18n.t("reasons")]: this.$i18n.t("r3"),
-        }
-      ],
-      this.modalShow = true;
+        },
+      ]),
+        (this.modalShow = true);
     },
   },
   watch: {
@@ -333,6 +333,10 @@ export default {
     },
   },
   created() {
+    console.log(
+      this.appDataLocal?.serverConnections,
+      "this.appDataLocal?.serverConnections"
+    );
     if (this.appDataLocal?.serverConnections?.serverAURL)
       this.serverConnections = this.appDataLocal.serverConnections;
   },
