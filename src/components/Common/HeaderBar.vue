@@ -16,7 +16,7 @@
               src="../../assets/images/icons/templateicon.svg"
               v-b-tooltip.hover
               :title="$t('viewTeamp')"
-              style="height: 20px"
+              style="height: 19px"
             />
           </b-button>
           <b-modal
@@ -236,7 +236,7 @@
               href="#"
               @click.prevent.stop="uploadConfigPopup"
               :title="$t('uploadConfigFiles')"
-              v-b-tooltip.hover
+              
             >
               <img
                 src="@/assets/images/icons/upload-icon.svg"
@@ -254,7 +254,7 @@
               href="#"
               @click.prevent.stop="downloadConfig"
               :title="$t('backupDatastore')"
-              v-b-tooltip.hover
+              
             >
               <img
                 src="@/assets/images/icons/backup-config1.svg"
@@ -268,7 +268,7 @@
               class="mx-1"
               @click="clearCache"
               :title="$t('clearCache')"
-              v-b-tooltip.hover
+              
             >
               <img
                 src="@/assets/images/icons/Icon material-refresh.svg"
@@ -281,7 +281,7 @@
               class="mx-1"
               @click.prevent.stop="addTranslations"
               :title="$t('addTranslations')"
-              v-b-tooltip.hover
+              
             >
               <img
                 src="@/assets/images/icons/plusicon.svg"

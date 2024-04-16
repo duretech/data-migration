@@ -8,7 +8,9 @@
     no-close-on-backdrop
   >
     <div class="">
-      <div class="form-group row d-flex justify-content-center align-items-center">
+      <div
+        class="form-group row d-flex justify-content-center align-items-center"
+      >
         <label
           for="inputDashboardDescription"
           class="col-sm-4 col-form-label"
@@ -100,6 +102,8 @@ export default {
     removeCID(obj) {
       if (obj && Object.prototype.hasOwnProperty.call(obj, "defaultLevelID"))
         obj["defaultLevelID"] = "";
+      if (obj && Object.prototype.hasOwnProperty.call(obj, "preFix"))
+        obj["preFix"] = "";
       if (obj && Object.prototype.hasOwnProperty.call(obj, "subLevelID"))
         obj["subLevelID"] = "";
       if (obj && Object.prototype.hasOwnProperty.call(obj, "defaultLocationID"))

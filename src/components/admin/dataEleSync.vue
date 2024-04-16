@@ -105,6 +105,7 @@ export default {
     "catComboID",
     "dataEleSyncData",
     "appData",
+    "subTab",
   ],
   components: { Treeselect },
   mixins: [loadLocChildMixin],
@@ -121,6 +122,10 @@ export default {
     };
   },
   watch: {
+    subTab(newVal) {
+      console.log(newVal, "in sync");
+      this.resetForm();
+    },
     selectedDataSet(newVal) {
       if (newVal) {
         this.dataElementList = [];
@@ -212,21 +217,34 @@ export default {
         let oldDEName = {};
         this.selectedDEs.forEach((sDE) => {
           // if (sDE != "all") {
-          let isFound = this.dataElementList.map((obj) => {
-            return obj.children.find((innerObj) => innerObj.id === sDE);
+          let isFound = null;
+          this.dataElementList.forEach((obj) => {
+            obj.children.forEach((innerObj) => {
+              if (innerObj.id === sDE) isFound = innerObj;
+            });
+            //return obj.children.find((innerObj) => innerObj.id === sDE);
           });
+
           //}
           // });
+          console.log(isFound, "isFound");
 
-          if (isFound && isFound.length > 0) {
-            oldDEName[sDE] = isFound[0]["label"];
-            deNameObj[sDE] = this.preFix + " - " + isFound[0]["label"];
+          if (isFound) {
+            oldDEName[sDE] = isFound["label"];
+            deNameObj[sDE] = this.preFix + " - " + isFound["label"];
           }
           // }
         });
         let allExist = true;
+        let allDECount = this.selectedDEs.length;
+        let index = 0;
         for (const sDE of this.selectedDEs) {
           // if (sDE != "all") {
+          let statement = this.$i18n.t("deSyncProgress", {
+            recordCount: index++,
+            totalLength: allDECount,
+          });
+          this.$store.commit("setLoadingText", statement);
           if (
             !this.savedDESyncData ||
             (this.savedDESyncData && !this.savedDESyncData[sDE])
@@ -454,6 +472,8 @@ export default {
     },
   },
   mounted() {
+    console.log("mounted called");
+
     if (this?.appData?.preFix) {
       this.prefixDisable = true;
     } else {

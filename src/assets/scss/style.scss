@@ -169,6 +169,10 @@ table{
   color: var(--input-text-color) !important;
 }
 
+.vue-treeselect__option--highlight {
+  background-color: transparent !important;
+}
+
 .mx-input{
   border: 0px;
 }
@@ -216,6 +220,10 @@ table{
     background-color: var(--color-white);
     border-color: var(--border-color) !important;
 
+  }
+
+  .vue-treeselect__menu{
+    max-height: 150px !important;
   }
 
 }
@@ -356,7 +364,7 @@ table{
           }
 
           .card{
-            border-color: transparent;
+            border-color: #f5f6f7;
           }
           
           .tab-section{
@@ -558,6 +566,10 @@ table{
         .text-md-start{
           padding: 20px 92px;
           color: var(--secondary-text-color);
+        }
+
+        .icon-info{
+          font-size: 10px;
         }
 
        

@@ -144,7 +144,7 @@ export default {
     close: "Close",
     troubleshooting: "Troubleshooting",
     r1: 'Ensure there is no " / " at the end of the server URL.',
-    r2: "The secondary service URL should be whitelisted on the primary service URL.",
+    r2: "The primary and secondary server URL should be whitelisted on their respective server.",
     r3: "Recheck your credentials (username/ password).",
     sno: "S.No",
     reasons: "Reasons",
@@ -162,6 +162,12 @@ export default {
     dataUploadStart: "Data upload process started",
     dataUploadProgress:
       "Data Uploading for {recordCount} of {totalLength} records.",
+      confirm: "Are you Sure?",
+      noConnect: "You will be disconnected!",
+      yDisconnect: "Yes, Disconnect",
+      cancel: "Cancel",
+    deSyncProgress:
+      "Data Syncing of {recordCount} from {totalLength} data elements.",
   },
   fr: {
     reTry: "Please retry",
@@ -301,7 +307,7 @@ export default {
     close: "Fermer",
     troubleshooting: "Dépannage",
     r1: "Assurez-vous qu'il n'y a pas de '/' à la fin de l'URL du serveur.",
-    r2: "L'URL du service secondaire doit être ajoutée à la liste blanche de l'URL du service principal.",
+    r2: "L'URL des serveurs principal et secondaire doit être ajoutée à la liste blanche sur leur serveur respectif.",
     r3: "Revérifiez vos informations d'identification (nom d'utilisateur/mot de passe).",
     sno: "S.Non",
     reasons: "Les raisons",
@@ -319,5 +325,11 @@ export default {
     dataUploadStart: "Le processus de téléchargement des données a commencé",
     dataUploadProgress:
       "Téléchargement de données pour {recordCount} des enregistrements {totalLength}.",
+      confirm: "Es-tu sûr?",
+      noConnect: "Vous serez déconnecté !",
+      yDisconnect: "Oui, déconnecter",
+      cancel: "Annuler",
+    deSyncProgress:
+      "Synchronisation des données de {recordCount} à partir des éléments de données {totalLength}.",
   },
 };

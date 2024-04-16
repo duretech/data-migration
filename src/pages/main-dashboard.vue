@@ -4,7 +4,7 @@
       <div>
         <b-tabs pills card vertical class="tab-section">
           <div
-            class="card-text text-right pt-0"
+            class="card-text text-right pt-0 mt-3"
             :class="[connectText.val ? 'c-green' : 'c-red']"
           >
             <i
@@ -23,7 +23,7 @@
             <b-card-text class="pt-0">
               <b-card no-body class="card-box position-relative">
                 <div
-                  class="d-flex justify-content-center align-items-center mb-3 flex-direction-column"
+                  class="d-flex justify-content-center align-items-center mb-3 mt-3 flex-direction-column"
                 >
                   <div class="position-relative">
                     <img src="../assets/images/e.jpg" />
@@ -73,7 +73,6 @@
                             v-if="appData"
                             :appData="appData"
                             @saveApp="saveApp"
-                            @connected="connected"
                           ></serverConnectivity>
                           <b-spinner
                             type="grow"
@@ -115,8 +114,9 @@
                         <b-tab
                           :title="$t('dataElementSync')"
                           :active="activeTab == 'dataMigrationSync'"
+                          @click="sendActiveTabData(`dataMigrationSync`)"
                         >
-                          <div class="row d-flex justify-content-end mx-4">
+                          <div class="row d-flex justify-content-end mx-4 mt-3">
                             <b-button
                               class="col-sm-3 w-auto btn-view"
                               @click="viewSyncData()"
@@ -129,7 +129,11 @@
                             <!-- <p></p> -->
                           </div>
                           <dataEleSync
-                            v-if="appData"
+                            v-if="
+                              appData &&
+                              appData.serverConnections.connectionStatus
+                            "
+                            :subTab="subTab"
                             :appData="appData"
                             :dataSetList="dataSetList"
                             :orgLevels="orgLevels"
@@ -143,10 +147,17 @@
                         <b-tab
                           :title="$t('exportandImportData')"
                           :active="activeTab === 'dataMigrationImp'"
+                          @click="sendActiveTabData(`dataMigrationImp`)"
                         >
                           <expImpData
-                            v-if="appData && dataSetList && dataSetList.length"
+                            v-if="
+                              appData &&
+                              dataSetList &&
+                              dataSetList.length &&
+                              appData.serverConnections.connectionStatus
+                            "
                             :appData="appData"
+                            :subTab="subTab"
                             :emitObj="emitObj"
                             :orgLevels="orgLevels"
                             :dataSetList="dataSetList"
@@ -175,7 +186,7 @@
       no-close-on-backdrop
       :title="$t('syncedData')"
     >
-      <b-row>
+      <b-row v-if="tableRows.length">
         <b-col lg="6" class="my-1">
           <b-form-group
             :label="$t('search')"
@@ -222,6 +233,7 @@
           :fields="tableFields"
           head-variant="light"
           :empty-text="$t('no_data_to_display')"
+          :empty-filtered-text="$t('no_data_to_display')"
           @filtered="onFiltered"
           :filter="filter"
           :filter-included-fields="filterOn"
@@ -263,6 +275,7 @@ export default {
 
   data() {
     return {
+      subTab: null,
       showDataModal: false,
       orgLevels: [],
       dataSetList: [],
@@ -289,8 +302,13 @@ export default {
   },
   watch: {
     async connectionStatus(newVal) {
-      await this.getOrgLevels();
-      await this.getDataSets();
+      if (this.appData.serverConnections.connectionStatus) {
+        await this.getOrgLevels();
+        await this.getDataSets();
+      } else {
+        this.orgLevels = [];
+        this.dataSetList = [];
+      }
       this.$store.commit("setLoading", false);
     },
     emitObj: {
@@ -337,8 +355,12 @@ export default {
     // },
   },
   methods: {
+    sendActiveTabData(activeTab) {
+      this.subTab = activeTab;
+    },
     updateActiveTab(newTab) {
       this.activeTab = newTab;
+      this.subTab = newTab;
     },
     onFiltered(filteredItems) {
       this.totalRows = filteredItems.length;
@@ -357,19 +379,22 @@ export default {
         },
       ];
       // console.log(this.tableFields, "this.tableFields");
-      Object.keys(this.dataEleSync).forEach((deId) => {
-        let innerObj = this.dataEleSync[deId],
-          obj = {};
-        obj[this.$i18n.t("serverA")] = innerObj["TeachingDEName"];
-        obj[this.$i18n.t("serverB")] = innerObj["LiveDEName"];
-        this.tableRows.push(obj);
-      });
+      if (this.dataEleSync) {
+        Object.keys(this.dataEleSync).forEach((deId) => {
+          let innerObj = this.dataEleSync[deId],
+            obj = {};
+          obj[this.$i18n.t("serverA")] = innerObj["TeachingDEName"];
+          obj[this.$i18n.t("serverB")] = innerObj["LiveDEName"];
+          this.tableRows.push(obj);
+        });
+      }
     },
     viewSyncData() {
       this.updateTable();
       this.showDataModal = true;
     },
     saveApp(newVal, reload) {
+      console.log("newVal", newVal);
       this.saveAppData(newVal, reload);
       if (newVal?.serverConnections) {
         newVal.serverConnections =
@@ -378,15 +403,6 @@ export default {
             : decompress(JSON.parse(newVal.serverConnections));
       }
       this.appData = newVal;
-    },
-    connected(val) {
-      if (val) {
-        this.connectText.val = true;
-        this.connectText.text = "Connected";
-      } else {
-        this.connectText.val = false;
-        this.connectText.text = "Disconnected";
-      }
     },
     async getDESyncData() {
       let key = this.generateKey("DESyncData");
@@ -601,6 +617,7 @@ export default {
           tableKey: key,
         })
         .then(async (resp) => {
+          console.log("resp.data.status", resp.data.status);
           if (resp.data.status === "OK") {
             this.$store.commit("setApplicationModule", data);
             if (this.$i18n.locale !== data.defaultLanguageLocale) {
@@ -608,6 +625,13 @@ export default {
               await loadLanguage(data.defaultLanguageLocale);
             }
             this.$nextTick(async () => {
+              if (data.serverConnections.connectionStatus) {
+                this.connectText.val = true;
+                this.connectText.text = "Connected";
+              } else {
+                this.connectText.val = false;
+                this.connectText.text = "Disconnected";
+              }
               this.updateDOM++;
               this.$store.commit("setStoreValues");
               this.$store.commit("setIsClearCache", true);

@@ -142,6 +142,7 @@ export default {
     "updateExpImp",
     "connectionStatus",
     "emitObj",
+    "subTab",
   ],
   components: { Treeselect, Datepicker },
   mixins: [loadLocChildMixin],
@@ -174,6 +175,11 @@ export default {
     };
   },
   watch: {
+    subTab(newVal) {
+      console.log(newVal, "in expimp");
+
+      this.resetForm();
+    },
     // uploadChunkLogs: {
     //   handler(newVal) {
     //     this.$store.commit(
@@ -230,7 +236,9 @@ export default {
     // },
     updateExpImp(newVal) {
       //this.updatePage = newVal;
-      this.getLocationList();
+      // this.getLocationList();
+      console.log("getDataElementList called from updateExpImp");
+
       this.getDataElementList();
     },
 
@@ -238,7 +246,9 @@ export default {
       //this.updatePage = newVal;
       console.log("connectionStatus in watch in expImp component", newVal);
       this.getLocationList(true);
-      this.getDataElementList();
+      //console.log("getDataElementList called from connectionStatus");
+
+      // this.getDataElementList();
     },
 
     appData: {
@@ -250,6 +260,8 @@ export default {
     selectedDataSet(newVal) {
       if (newVal) {
         this.dataElementList = [];
+        console.log("getDataElementList called from selectedDataSet");
+
         this.getDataElementList();
         // this.getDataSetPeriod();
         //this.getDataSetPeriod();
@@ -991,13 +1003,25 @@ export default {
     },
     async getDataElementList() {
       this.dataElementList = [];
-      if (this.dataSetList !== null) {
+      if (this.dataSetList !== null && this.selectedDataSet.length > 0) {
         for (let set in this.selectedDataSet) {
-          // console.log(this.selectedDataSet[set]);
-          let name = this.dataSetList.filter(
-            (item) => item.id == this.selectedDataSet[set]
+          console.log(this.selectedDataSet.length);
+          // let name = this.dataSetList.filter(
+          //   (item) => item.id == this.selectedDataSet[set]
+          // );
+          let findDataSet = this.$store.getters?.getDataSetList?.find(
+            (obj) => obj.id === this.selectedDataSet[set]
           );
-          let dataSetPeriod = this.getDataSetPeriod(name[0].id);
+          let dataSetPeriod = findDataSet?.["periodType"] || "Monthly";
+          let name = findDataSet;
+          console.log(
+            name,
+            this.selectedDataSet,
+            this.dataSetList,
+            this.$store.getters.getDataSetList,
+            "name of dataset"
+          );
+          //let dataSetPeriod = this.getDataSetPeriod(name[0].id);
           // this.$store.commit("setLoading", true);
           await service
             .getDataElementsByDataSets(this.selectedDataSet[set], true)
@@ -1010,8 +1034,8 @@ export default {
               let arr = [];
               if (isFound && isFound.length > 0) {
                 arr.push({
-                  id: name[0].id,
-                  label: name[0].label + `(${dataSetPeriod})`,
+                  id: name.id,
+                  label: name.displayName + `(${dataSetPeriod})`,
                   children: isFound.map((obj) => {
                     return {
                       id: obj.id,
@@ -1224,9 +1248,10 @@ export default {
       // }
     },
   },
-  created() {
+  async created() {
     this.getLocationList(true);
-    this.getDataElementList();
+    console.log("getDataElementList called from craeted");
+    await this.getDataElementList();
     this.getTemplatesData();
   },
 };

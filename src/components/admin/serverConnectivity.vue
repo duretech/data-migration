@@ -144,7 +144,7 @@
     >
       <div v-if="showFieldsBtns && !this.serverConnections.connectionStatus">
         <b-icon
-          class="mx-4 c-pointer"
+          class="mx-4 c-pointer icon-info"
           icon="info-circle-fill"
           scale="2"
           variant="info"
@@ -152,7 +152,10 @@
         ></b-icon>
       </div>
       <div class="text-center">
-        <b-button class="col-sm-2 blue-btn w-auto" @click="saveConnection">
+        <b-button
+          class="col-sm-2 blue-btn w-auto"
+          @click="saveConnection('connect')"
+        >
           {{ $t("connect") }}
         </b-button>
       </div>
@@ -164,7 +167,7 @@
       <div class="text-center">
         <b-button
           class="col-sm-2 blue-btn w-auto mx-2"
-          @click="disconnectConnection"
+          @click="saveConnection('disconnect')"
         >
           {{ $t("disconnect") }}
         </b-button>
@@ -233,7 +236,7 @@ export default {
     },
   },
   methods: {
-    async saveConnection() {
+    async saveConnection(val) {
       this.$store.commit("setLoading", true);
 
       if (!this.appDataLocal.serverConnections)
@@ -259,19 +262,41 @@ export default {
         Authorization: encodedData, //generate basic auth
       };
       this.$store.commit("setSecondaryHeader", secondaryHeader);
-      this.getOrgLevels();
+      if (val == "connect") {
+        this.getOrgLevels();
+      } else {
+        this.$store.commit("setLoading", false);
+        this.$swal({
+          text: this.$i18n.t("noRetrive"),
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: this.$i18n.t("yDisconnect"),
+          cancelButtonText: this.$i18n.t("cancel"),
+        }).then((result) => {
+          this.$store.commit("setLoading", true);
+          if (result.isConfirmed) {
+            this.serverConnections.serverACredentials.username = ""
+            this.serverConnections.serverACredentials.password = ""
+            this.appDataLocal.serverConnections.connectionStatus = false;
+            this.reset = true;
+            this.$emit("saveApp", this.appDataLocal, true);
+          }
+          else{
+            this.$store.commit("setLoading", false);
+          }
+        });
+      }
     },
     async getOrgLevels() {
       await service
         .getOrganisationUnitLevels({ secondary: true })
         .then((l) => {
-          this.serverConnections.connectionStatus = true;
+          this.appDataLocal.serverConnections.connectionStatus = true;
           this.orgLevels = l.data.map((obj) => {
             return { value: obj.level, text: obj.displayName };
           });
           this.$store.commit("setOrgLevels", l.data);
           this.$emit("saveApp", this.appDataLocal, true);
-          this.$emit("connected", this.serverConnections.connectionStatus);
           this.sweetAlert({
             title: this.$i18n.t("success"),
             // text: alertText,
@@ -279,9 +304,8 @@ export default {
           });
         })
         .catch((err) => {
-          this.serverConnections.connectionStatus = false;
+          this.appDataLocal.serverConnections.connectionStatus = false;
           this.$emit("saveApp", this.appDataLocal, true);
-          this.$emit("connected", this.serverConnections.connectionStatus);
           this.sweetAlert({
             title: this.$i18n.t("success"),
             // text: alertText,
@@ -290,11 +314,7 @@ export default {
         });
       this.reset = false;
     },
-    disconnectConnection() {
-      this.reset = true;
-      this.serverConnections.serverACredentials.username = "";
-      this.serverConnections.serverACredentials.password = "";
-    },
+
     resetAction() {
       this.reset = true;
     },
@@ -333,10 +353,6 @@ export default {
     },
   },
   created() {
-    console.log(
-      this.appDataLocal?.serverConnections,
-      "this.appDataLocal?.serverConnections"
-    );
     if (this.appDataLocal?.serverConnections?.serverAURL)
       this.serverConnections = this.appDataLocal.serverConnections;
   },
