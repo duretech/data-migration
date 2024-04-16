@@ -176,6 +176,7 @@ class DataService {
     isUses = false,
     isAudit = false,
     isDefault = false,
+    secondary = false,
   }) {
     let tableName = store.getters.getNamespace;
     if (namespace) {
@@ -190,10 +191,13 @@ class DataService {
     if (isAudit) {
       tableName = `${tableName}_audit`;
     }
+    let url = secondary
+      ? store.getters.getSecondaryServerUrl
+      : store.getters.getBaseURL;
     return axios({
       method: "get",
-      url: `${store.getters.getBaseURL}/api/dataStore/${tableName}`,
-      headers: header,
+      url: `${url}/api/dataStore/${tableName}`,
+      headers: secondary ? store.getters.getSecondaryHeader : header,
     });
   }
   /**
@@ -378,14 +382,14 @@ class DataService {
       signal,
     });
   }
-  getDataElementByName(name){
-      return axios({
-        method: "get",
-        url: `${store.getters.getBaseURL}/api/dataElements.json?filter=identifiable:token:${name}`,
-        // url: `${store.getters.getBaseURL}/api/dataElements.json?fields=id,displayName,categoryCombo%5bid,categoryOptionCombos%5bid%5d%5d&paging=false`,
-        // url: `${store.getters.getBaseURL}/api/dataElements.json?fields=id,displayName,formName,description,categoryCombo[id,displayName,categoryOptionCombos[id,displayName]]&paging=false`,
-        headers: header,
-      });
+  getDataElementByName(name) {
+    return axios({
+      method: "get",
+      url: `${store.getters.getBaseURL}/api/dataElements.json?filter=identifiable:token:${name}`,
+      // url: `${store.getters.getBaseURL}/api/dataElements.json?fields=id,displayName,categoryCombo%5bid,categoryOptionCombos%5bid%5d%5d&paging=false`,
+      // url: `${store.getters.getBaseURL}/api/dataElements.json?fields=id,displayName,formName,description,categoryCombo[id,displayName,categoryOptionCombos[id,displayName]]&paging=false`,
+      headers: header,
+    });
   }
   getDataElementsByDataSets(DSID, secondary, signal) {
     let url = secondary
