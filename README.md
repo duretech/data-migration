@@ -36,5 +36,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ```
 1.Upgradation in server connectivity
 2.Enhancement in data import process
-3.Bugs and resolvement
+3.Enhancement in data sync process
+4. UI/CSS issue fixes
+5.Bugs and resolution
 ```
